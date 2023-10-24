@@ -7,6 +7,8 @@ export interface InputProps
 
 
 // TODO: add placeholder & hint props
+// TODO: error states etc
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (

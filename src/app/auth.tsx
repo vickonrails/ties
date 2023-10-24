@@ -1,9 +1,35 @@
 import { Button, Input } from '@/components/ui'
+import { supabase } from '@/core/supabase'
+import { useForm } from 'react-hook-form'
+
+interface Input {
+    email: string
+}
 
 export default function Auth() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting, isSubmitSuccessful },
+    } = useForm<Input>()
+
+    const onSubmit = async ({ email }: Input) => {
+        const { error } = await supabase.auth.signInWithOtp({
+            email,
+            options: { emailRedirectTo: 'http://localhost:5173/app' }
+        })
+
+        if (error) {
+            // TODO: handle error more efficiently
+            console.log(`An error occurred`)
+        }
+
+        console.log(`Email has been sent to your email address`)
+    }
+
+
     return (
         <section className='flex w-ful h-full'>
-
             <section className='flex flex-1 p-12'>
                 <div className='flex gap-3'>
                     <div className='h-6 w-6 bg-black' />
@@ -24,13 +50,33 @@ export default function Auth() {
                         <span className='relative text-gray-600 bg-white px-3'>Or log in using Email</span>
                     </p>
 
-                    <form className='flex flex-col gap-4'>
-                        <Input placeholder='Enter email address' />
-                        <Button>Send Magic Link</Button>
+                    <form
+                        noValidate
+                        className='flex flex-col gap-4'
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <Input
+                            placeholder='Enter email address'
+                            {...register('email', {
+                                required: 'Email address is required',
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: "That doesn't look like a correct email address"
+                                }
+                            })}
+                        />
+                        {errors.email && (
+                            <p className='text-sm'>{errors.email?.message}</p>
+                        )}
+
+                        {isSubmitSuccessful && (
+                            <p>
+                                A login link has been sent to your email
+                            </p>
+                        )}
+                        <Button disabled={isSubmitSuccessful} type='submit'>{isSubmitting ? 'Submitting' : 'Send Magic Link'}</Button>
                     </form>
                 </section>
-
-                {/* <Link to='/'>Go into the app</Link> */}
             </section>
 
             <section className='sm:hidden md:block flex-1 bg-gray-100 auth_pattern' />

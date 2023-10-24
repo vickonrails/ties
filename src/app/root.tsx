@@ -1,30 +1,46 @@
+import { supabase } from '@/core/supabase';
+import { AuthSession, Session } from "@supabase/supabase-js";
 import { Outlet } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { supabase } from '@/core/supabase'
-import { Session } from "@supabase/supabase-js";
+import { createContext, useEffect, useState } from "react";
+
+export interface AuthContextInterface {
+    session: AuthSession | null
+}
+
+export const AuthenticationContext = createContext<AuthContextInterface>({ session: null })
+const AuthProvider = AuthenticationContext.Provider;
 
 export default function Root() {
     const [session, setSession] = useState<Session | null>(null)
+    const [loadingSession, setLoadingSession] = useState(true)
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session)
+            setLoadingSession(false)
+            setSession(session ?? null)
         })
 
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
+            console.log(session)
             setSession(session)
         })
 
         return () => subscription.unsubscribe()
     }, [])
 
-    // TODO: do something with the session
+    const contextValue = {
+        session
+    }
 
-    console.log({ session })
+    if (loadingSession) {
+        return <p>Is Loading...</p>
+    }
 
     return (
-        <Outlet />
+        <AuthProvider value={contextValue}>
+            <Outlet />
+        </AuthProvider>
     )
 }
