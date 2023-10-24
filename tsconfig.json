@@ -26,10 +26,16 @@
       "@/*": [
         "./src/*"
       ],
-    }
+    },
+    "types": [
+      "node",
+      "vite/client"
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "database.types.ts",
+    "seed.ts"
   ],
   "references": [
     {

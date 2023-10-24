@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RootRoute, Route, Router, RouterProvider, redirect } from '@tanstack/react-router'
+import { RootRoute, Route, RouteProps, Router, RouterProvider, redirect, useParams } from '@tanstack/react-router'
 
 import {
   QueryClient,
@@ -27,6 +27,11 @@ async function isAuthenticated() {
   const { data: { session } } = await supabase.auth.getSession()
   return session
 }
+
+// API calls
+// post loaders
+// loader clients
+// router context
 
 const rootRoute = new RootRoute({
   component: Root,
@@ -65,12 +70,21 @@ const appIndexRoute = new Route({
 
 const friendDetails = new Route({
   getParentRoute: () => appRoute,
-  path: '$friend',
-  component: Friend
+  path: '$connectionId',
+  loader: async ({ params }) => {
+    const connection = ((await supabase.from('connection').select().eq('id', params.connectionId))).data
+
+    return {
+      connection
+    }
+  },
+  component: Friend,
 })
 
-function Friend() {
-  return <p>Friend</p>
+
+function Friend({ useLoader }: RouteProps) {
+  const { connection } = useLoader()
+  return <p>{connection[0].fullname}</p>
 }
 
 const routeTree = rootRoute.addChildren([
