@@ -1,6 +1,6 @@
+import { RootRoute, Route, Router, RouterProvider, redirect } from '@tanstack/react-router'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RootRoute, Route, RouteProps, Router, RouterProvider, redirect, useParams } from '@tanstack/react-router'
 
 import {
   QueryClient,
@@ -11,8 +11,10 @@ import Auth from './app/auth'
 import Index from './app/index'
 import Root from './app/root'
 
-import './index.css'
 import { supabase } from './core/supabase'
+import ConnectionDetails from './pages/connection-details'
+
+import './index.css'
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -78,14 +80,8 @@ const friendDetails = new Route({
       connection
     }
   },
-  component: Friend,
+  component: ConnectionDetails,
 })
-
-
-function Friend({ useLoader }: RouteProps) {
-  const { connection } = useLoader()
-  return <p>{connection[0].fullname}</p>
-}
 
 const routeTree = rootRoute.addChildren([
   authRoute,

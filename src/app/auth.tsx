@@ -27,7 +27,6 @@ export default function Auth() {
         console.log(`Email has been sent to your email address`)
     }
 
-
     return (
         <section className='flex w-ful h-full'>
             <section className='flex flex-1 p-12'>

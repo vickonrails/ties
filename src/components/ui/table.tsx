@@ -1,4 +1,5 @@
 
+import { cn } from '@/lib/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { CellContext, ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Connection } from 'lib/types';
@@ -7,29 +8,64 @@ import { ReactNode } from 'react';
 
 function TextColumn({ getValue }: CellContext<Connection, string>) {
     const value = getValue();
-    return <p className='font-medium text-gray-900'>{value}</p>
+    return <p className='font-medium text-gray-900'>{value ?? '-'}</p>
 }
 
 function LocationColumn({ getValue }: CellContext<Connection, string>) {
     const country = getValue()
-    return <p>{country}</p>
+    return <p>{country ?? '-'}</p>
 }
 
+function Dot({ className }: { className: string }) {
+    return (
+        <span className={cn('h-2 w-2 block  rounded-full', className)} />
+    )
+}
+
+// TODO: settle on more colors
+// TODO: refactor this component to avoid duplication
 function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
+    const baseClasses = 'text-xs border p-1 px-2 rounded-sm inline-flex items-center gap-2'
     const level = getValue()
-
-    if (!level) return <p>Acquintances</p>
-
     switch (level) {
         case 0:
-            return <p>Acquintances</p>
+            return (
+                <div className={cn(baseClasses)}>
+                    <Dot className='bg-red-300' />
+                    <p className='uppercase'>Acquaintance</p>
+                </div>
+            )
         case 1:
-            return <p>Casual Friends</p>
+            return (
+                <div className={cn(baseClasses)}>
+                    <Dot className='bg-blue-300' />
+                    <p className='uppercase'>Casual Friends</p>
+                </div>
+            )
+
         case 2:
-            return <p>Close Friends</p>
+            return (
+                <div className={cn(baseClasses)}>
+                    <Dot className='bg-green-300' />
+                    <p className='uppercase'>Close Friends</p>
+                </div>
+            )
+
         case 3:
-            return <p>Intimate Friends</p>
+            return (
+                <div className={cn(baseClasses)}>
+                    <Dot className='bg-purple-300' />
+                    <p className='uppercase'>Intimate Friends</p>
+                </div>
+            )
     }
+
+    return (
+        <div className={cn(baseClasses)}>
+            <Dot className='bg-red-300' />
+            <p className='uppercase'>Acquaintance</p>
+        </div>
+    )
 }
 
 const columns: ColumnDef<Connection, unknown>[] = [
@@ -46,7 +82,7 @@ const columns: ColumnDef<Connection, unknown>[] = [
     {
         accessorKey: 'timezone',
         header: 'Timezone',
-        cell: (props) => <p>{props.getValue() as string}</p>
+        cell: (props) => <p>{props.getValue() as string ?? '-'}</p>
     },
     {
         accessorKey: 'friendshiplevel',
@@ -56,7 +92,7 @@ const columns: ColumnDef<Connection, unknown>[] = [
     {
         accessorKey: 'created_at',
         header: 'Added',
-        cell: ({ getValue }) => <p>{getValue() as string}</p>
+        cell: ({ getValue }) => <p>{getValue() as string ?? '-'}</p>
     }
 ]
 
@@ -81,14 +117,12 @@ const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) 
                         {table.getHeaderGroups().map(headerGroups => (
                             <>
                                 {headerGroups.headers.map(header => (
-                                    <>
-                                        <th className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
-                                            <div className='flex items-center gap-2'>
-                                                {header.column.columnDef.header as ReactNode}
-                                                <ArrowUpDown className='h-4 w-4' />
-                                            </div>
-                                        </th>
-                                    </>
+                                    <th className='font-normal text-left text-sm p-3 px-4 text-gray-600' key={header.id}>
+                                        <div className='flex items-center gap-2'>
+                                            {header.column.columnDef.header as ReactNode}
+                                            <ArrowUpDown className='h-4 w-4' />
+                                        </div>
+                                    </th>
                                 ))}
                             </>
                         ))}
@@ -103,7 +137,7 @@ const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) 
                         <tr
                             key={row.id}
                             onClick={_ => navigateToConnection(row.original.id)}
-                            className='hover:bg-gray-100 hover:cursor-pointer transition-colors border-b border-gray-100'
+                            className='hover:bg-gray-100 hover:cursor-pointer transition-colors border border-t-0 border-gray-100'
                         >
                             {row.getVisibleCells().map(cell => (
                                 <td key={cell.id} className='py-4 px-4 text-sm text-gray-500'>
