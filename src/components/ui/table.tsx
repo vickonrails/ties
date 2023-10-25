@@ -31,14 +31,14 @@ function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
         case 0:
             return (
                 <div className={cn(baseClasses)}>
-                    <Dot className='bg-red-300' />
+                    <Dot className='bg-purple-400' />
                     <p className='uppercase'>Acquaintance</p>
                 </div>
             )
         case 1:
             return (
                 <div className={cn(baseClasses)}>
-                    <Dot className='bg-blue-300' />
+                    <Dot className='bg-blue-400' />
                     <p className='uppercase'>Casual Friends</p>
                 </div>
             )
@@ -46,7 +46,7 @@ function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
         case 2:
             return (
                 <div className={cn(baseClasses)}>
-                    <Dot className='bg-green-300' />
+                    <Dot className='bg-green-400' />
                     <p className='uppercase'>Close Friends</p>
                 </div>
             )
@@ -54,7 +54,7 @@ function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
         case 3:
             return (
                 <div className={cn(baseClasses)}>
-                    <Dot className='bg-purple-300' />
+                    <Dot className='bg-red-400' />
                     <p className='uppercase'>Intimate Friends</p>
                 </div>
             )
@@ -62,7 +62,7 @@ function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
 
     return (
         <div className={cn(baseClasses)}>
-            <Dot className='bg-red-300' />
+            <Dot className='bg-purple-400' />
             <p className='uppercase'>Acquaintance</p>
         </div>
     )

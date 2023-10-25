@@ -36,7 +36,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, ...rest }: React.HTMLAttribu
 
     const onSubmit = async (data: ConnectionInsert) => {
         try {
-            const { error } = await supabase.from('connection').insert(data)
+            const { error } = await supabase.from('connection').insert({ ...data, friendshiplevel: 0 })
             if (error) throw error;
 
             onSubmitSuccessful();

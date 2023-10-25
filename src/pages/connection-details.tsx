@@ -1,7 +1,8 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Layout } from '@/components/ui/layout'
-import { RouteProps } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { Link, RouteProps, useRouter } from '@tanstack/react-router'
 import { BarChart4, ChevronLeft, HeartHandshake, Linkedin, PieChart, Twitter } from 'lucide-react'
 
 const FRIENDSHIP_LEVEL_LOOKUP = [
@@ -9,6 +10,13 @@ const FRIENDSHIP_LEVEL_LOOKUP = [
     'Casual Friends',
     'Close Friends',
     'Intimate Friends'
+]
+
+const FRIENDSHIP_LEVEL_COLORS = [
+    'bg-purple-400',
+    'bg-blue-400',
+    'bg-green-400',
+    'bg-red-400'
 ]
 
 function Tag({ label }: { label: string }) {
@@ -38,18 +46,24 @@ const contactInfo = [
 
 function ConnectionDetails({ useLoader }: RouteProps) {
     const { connection } = useLoader()
-    console.log(connection)
+    const router = useRouter()
+    console.log(connection[0].friendshiplevel)
+
+    const goBack = () => {
+        router.history.back();
+    }
+
     return (
         <Layout>
-            <button className='flex mb-4 items-center'>
+            <Link onClick={goBack} className='flex mb-4 items-center'>
                 <ChevronLeft />
                 <span>Back</span>
-            </button>
+            </Link>
             <div className='mb-10'>
                 <div className='bg-gray-100 w-full h-72 relative'>
-                    {connection[0].friendshiplevel && <span className='absolute p-3 py-2 bg-white right-4 top-4'>
+                    <span className={cn('select-none absolute p-3 py-2 right-4 top-4 text-white rounded', FRIENDSHIP_LEVEL_COLORS[connection[0].friendshiplevel])}>
                         {FRIENDSHIP_LEVEL_LOOKUP[connection[0].friendshiplevel]}
-                    </span>}
+                    </span>
                 </div>
             </div>
             <section className='flex gap-4 h-full'>
