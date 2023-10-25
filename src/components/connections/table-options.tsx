@@ -1,10 +1,17 @@
 import { HeartHandshake, History, PencilLine, Trash } from "lucide-react"
 import { ReactNode } from "react"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "../ui/menubar"
+import { TableActions } from "../ui/table"
+import { Connection } from "lib/types"
 
-const ConnectionTableActions = ({ trigger }: { trigger: ReactNode }) => {
-    const openEditModal = () => { }
-    const openDeleteModal = () => { }
+interface ConnectionTableActionsProps<T> {
+    trigger: ReactNode,
+    actions: TableActions<T>
+    connection: Connection
+}
+
+const ConnectionTableActions = ({ trigger, actions = {}, connection }: ConnectionTableActionsProps<Connection>) => {
+    const { onDeleteClick, onEditClick } = actions
     const openHistoryModal = () => { }
     const openReachoutModal = () => { }
 
@@ -20,7 +27,7 @@ const ConnectionTableActions = ({ trigger }: { trigger: ReactNode }) => {
                     <MenubarItem
                         className="text-gray-600"
                         icon={<PencilLine className="w-4 h-4" />}
-                        onClick={openEditModal}
+                        onClick={_ => onEditClick?.(connection)}
                     >
                         Edit
                     </MenubarItem>
@@ -44,8 +51,7 @@ const ConnectionTableActions = ({ trigger }: { trigger: ReactNode }) => {
                     <MenubarItem
                         className="bg-red-50 text-red-400"
                         icon={<Trash className="w-4 h-4" />}
-                        disabled
-                        onClick={openDeleteModal}
+                        onClick={_ => onDeleteClick?.(connection)}
                     >
                         Delete
                     </MenubarItem>

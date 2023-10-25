@@ -6,11 +6,10 @@ import { useForm } from 'react-hook-form'
 import { Button, Input } from '.'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './dialog'
 
-const CreateConnectionDialog = ({ open, ...rest }: DialogProps) => {
+const CreateUpdateConnectionDialog = ({ open, ...rest }: DialogProps) => {
     const closeForm = () => {
         rest.onOpenChange?.(false)
     }
-
     return (
         <Dialog open={open} {...rest}>
             <DialogContent>
@@ -58,4 +57,4 @@ const CreateConnectionForm = ({ onSubmitSuccessful, ...rest }: React.HTMLAttribu
     )
 }
 
-export default CreateConnectionDialog
+export default CreateUpdateConnectionDialog

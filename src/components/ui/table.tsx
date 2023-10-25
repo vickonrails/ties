@@ -7,6 +7,9 @@ import { ArrowUpDown, MoreVertical } from 'lucide-react';
 import { ReactNode } from 'react';
 import ConnectionTableActions from '../connections/table-options';
 import { ConnectionAvatar } from './avatar';
+import ConnectionDeleteModal from './modals/delete-modal';
+import { useDialog } from './hooks/use-dialog';
+import CreateUpdateConnectionDialog from './create-connection';
 
 function TextColumn({ getValue }: CellContext<Connection, string>) {
     const value = getValue();
@@ -103,9 +106,24 @@ const columns: ColumnDef<Connection, unknown>[] = [
     }
 ]
 
+export interface TableActions<T> {
+    onDelete?: (id: string) => void
+    onDeleteClick?: (item: T) => void
+    onEdit?: (id: string) => void
+    onEditClick?: (item: T) => void
+}
+
+interface ConnectionsTableProps<T> {
+    connections: Connection[],
+    actions: TableActions<T>
+}
+
 // Empty state for table
-const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) => {
+const ConnectionsTable = ({ connections: data, actions }: ConnectionsTableProps<Connection>) => {
+    const { onDelete } = actions
     const navigate = useNavigate()
+    const { isOpen, showDialog, setIsOpen } = useDialog({});
+    const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen } = useDialog({});
     const table = useReactTable<Connection>({
         data,
         columns,
@@ -153,6 +171,8 @@ const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) 
                             ))}
                             <td className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
                                 <ConnectionTableActions
+                                    connection={row.original}
+                                    actions={{ onDelete, onDeleteClick: showDialog, onEditClick: showEditDialog }}
                                     trigger={
                                         <MoreVertical className='h-4 w-4' />
                                     }
@@ -161,6 +181,16 @@ const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) 
                         </tr>
                     ))}
                 </tbody>
+
+                <CreateUpdateConnectionDialog
+                    open={isEditDialogOpen}
+                    onOpenChange={setEditDialogOpen}
+                />
+
+                <ConnectionDeleteModal
+                    open={isOpen}
+                    onOpenChange={setIsOpen}
+                />
             </table>
         </>
     )

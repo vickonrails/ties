@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui";
-import CreateConnectionDialog from "@/components/ui/create-connection";
+import CreateUpdateConnectionDialog from "@/components/ui/create-connection";
 import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table";
 import { supabase } from "@/core/supabase";
@@ -23,20 +23,39 @@ export default function Connections() {
         setModalOpen(true)
     }
 
+    const onEdit = (item: unknown) => {
+        console.log(`Deleting ${item}`)
+    }
+
+    const onDelete = (id: string) => {
+        console.log(`Deleting ${id}`)
+    }
+
     return (
         <Layout>
             <div className="flex justify-between mb-6">
                 <h1 className="text-2xl font-medium">Connections</h1>
                 <div className="flex justify-center items-center">
-                    <Button variant='outline' onClick={openCreateConnectionDialog}>Add Connection</Button>
+                    <Button
+                        variant='outline'
+                        onClick={openCreateConnectionDialog}
+                    >
+                        Add Connection
+                    </Button>
                     <button>
                         <MoreVertical />
                     </button>
                 </div>
             </div>
 
-            <ConnectionsTable connections={connections} />
-            <CreateConnectionDialog open={modalOpen} onOpenChange={setModalOpen} />
+            <ConnectionsTable
+                connections={connections}
+                actions={{ onEdit, onDelete }}
+            />
+            <CreateUpdateConnectionDialog
+                open={modalOpen}
+                onOpenChange={setModalOpen}
+            />
         </Layout>
     )
 }
