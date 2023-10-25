@@ -45,4 +45,20 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
+/**
+ * Connection Avatar
+ */
+export function ConnectionAvatar({ fullname }: { fullname: string }) {
+  return (
+    <Avatar className='h-32 w-32 border-4 border-white'>
+      <AvatarImage src='' />
+      {fullname && (
+        <AvatarFallback className='text-5xl'>
+          {fullname.substring(0, 2).toUpperCase()}
+        </AvatarFallback>
+      )}
+    </Avatar>
+  )
+}
+
 export { Avatar, AvatarImage, AvatarFallback }

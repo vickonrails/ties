@@ -7,14 +7,14 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
-import Auth from './app/auth'
-import Index from './app/index'
 import Root from './app/root'
 
 import { supabase } from './core/supabase'
 import ConnectionDetails from './pages/connection-details'
 
 import './index.css'
+import Auth from './pages/auth'
+import Connections from './pages/connections'
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -42,7 +42,7 @@ const rootRoute = new RootRoute({
 const authRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/auth',
-  component: Auth,
+  component: Auth
 })
 
 const appRoute = new Route({
@@ -67,7 +67,7 @@ const appRoute = new Route({
 const appIndexRoute = new Route({
   path: '/',
   getParentRoute: () => appRoute,
-  component: Index,
+  component: Connections,
 })
 
 const friendDetails = new Route({

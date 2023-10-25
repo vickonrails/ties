@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export type Connection = Database['public']['Tables']['connection']['Row']
 
-export default function Index() {
+export default function Connections() {
     const [connections, setConnections] = useState<Connection[]>([])
     const [modalOpen, setModalOpen] = useState(false)
 

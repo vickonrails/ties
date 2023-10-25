@@ -31,7 +31,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, ...rest }: React.HTMLAttribu
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { isSubmitting },
     } = useForm<ConnectionInsert>()
 
     const onSubmit = async (data: ConnectionInsert) => {
