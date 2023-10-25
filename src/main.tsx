@@ -70,14 +70,24 @@ const appIndexRoute = new Route({
   component: Connections,
 })
 
-const friendDetails = new Route({
+type Params = {
+  connectionId: string
+}
+
+export type RouteProps = {
+  params: Params
+}
+
+const connectionDetails = new Route({
   getParentRoute: () => appRoute,
   path: '$connectionId',
-  loader: async ({ params }) => {
-    const connection = ((await supabase.from('connection').select().eq('id', params.connectionId))).data
+  // TODO: fix the correct types here
+  // @ts-ignore
+  loader: async ({ params }: RouteProps) => {
+    const connection = ((await supabase.from('connection').select().eq('id', params.connectionId)))
 
     return {
-      connection
+      connection: connection?.data?.[0]
     }
   },
   component: ConnectionDetails,
@@ -85,7 +95,7 @@ const friendDetails = new Route({
 
 const routeTree = rootRoute.addChildren([
   authRoute,
-  appRoute.addChildren([appIndexRoute, friendDetails])
+  appRoute.addChildren([appIndexRoute, connectionDetails])
 ])
 
 const router = new Router({ routeTree })
