@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui";
 import CreateUpdateConnectionDialog from "@/components/ui/create-connection";
 import { Layout } from "@/components/ui/layout";
-import ConnectionsTable from "@/components/ui/table";
+import ConnectionsTable from "@/components/ui/table/table";
 import { supabase } from "@/core/supabase";
 import { Database } from "lib/database.types";
 import { MoreVertical } from "lucide-react";

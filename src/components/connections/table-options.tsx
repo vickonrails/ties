@@ -1,13 +1,13 @@
 import { HeartHandshake, History, PencilLine, Trash } from "lucide-react"
 import { ReactNode } from "react"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "../ui/menubar"
-import { TableActions } from "../ui/table"
+import { TableActions } from "../ui/table/table"
 import { Connection } from "lib/types"
 
 interface ConnectionTableActionsProps<T> {
     trigger: ReactNode,
     actions: TableActions<T>
-    connection: Connection
+    connection: T
 }
 
 const ConnectionTableActions = ({ trigger, actions = {}, connection }: ConnectionTableActionsProps<Connection>) => {
