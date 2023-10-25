@@ -1,6 +1,7 @@
-import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import * as React from "react"
 
+import hashColors from "@/lib/hash-colors"
 import { cn } from "@/lib/utils"
 
 const Avatar = React.forwardRef<
@@ -48,12 +49,41 @@ AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 /**
  * Connection Avatar
  */
-export function ConnectionAvatar({ fullname }: { fullname: string }) {
+type Size = 'xs' | 'sm' | 'md' | 'lg'
+interface ConnectionAvatarProps extends AvatarPrimitive.AvatarImageProps {
+  fullname: string
+  size?: Size
+  border?: boolean
+}
+
+function getSizeValues(size: Size): { dimensions: string, textSize: string } {
+  switch (size) {
+    case 'xs':
+      return { dimensions: 'h-8 w-8', textSize: 'text-xs' }
+
+    case 'sm':
+      return { dimensions: 'h-10 w-10', textSize: 'text-base' }
+
+    case 'md':
+      return { dimensions: 'h-16 w-16', textSize: 'text-2xl' }
+
+    case 'lg':
+      return { dimensions: 'h-32 w-32', textSize: 'text-5xl' }
+  }
+}
+
+export function ConnectionAvatar({ fullname, size = 'sm', border, ...rest }: ConnectionAvatarProps) {
+  const { dimensions, textSize } = getSizeValues(size)
+  const background = hashColors(fullname);
+  console.log({ background })
   return (
-    <Avatar className='h-32 w-32 border-4 border-white'>
+    <Avatar className={
+      cn(dimensions, border && 'border-white border-4')}
+      {...rest}
+    >
       <AvatarImage src='' />
       {fullname && (
-        <AvatarFallback className='text-5xl'>
+        <AvatarFallback className={cn('text-white', textSize, background)}>
           {fullname.substring(0, 2).toUpperCase()}
         </AvatarFallback>
       )}
@@ -61,4 +91,4 @@ export function ConnectionAvatar({ fullname }: { fullname: string }) {
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarFallback, AvatarImage }

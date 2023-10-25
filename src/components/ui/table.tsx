@@ -5,10 +5,17 @@ import { CellContext, ColumnDef, flexRender, getCoreRowModel, useReactTable } fr
 import { Connection } from 'lib/types';
 import { ArrowUpDown, MoreVertical } from 'lucide-react';
 import { ReactNode } from 'react';
+import ConnectionTableActions from '../connections/table-options';
+import { ConnectionAvatar } from './avatar';
 
 function TextColumn({ getValue }: CellContext<Connection, string>) {
     const value = getValue();
-    return <p className='font-medium text-gray-900'>{value ?? '-'}</p>
+    return (
+        <div className='font-medium text-gray-900 flex items-center gap-2'>
+            <ConnectionAvatar fullname={value} size='xs' />
+            <p>{value ?? '-'}</p>
+        </div>
+    )
 }
 
 function LocationColumn({ getValue }: CellContext<Connection, string>) {
@@ -144,11 +151,12 @@ const ConnectionsTable = ({ connections: data }: { connections: Connection[] }) 
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}
-
                             <td className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
-                                <button onClick={e => e.stopPropagation()}>
-                                    <MoreVertical className='h-4 w-4' />
-                                </button>
+                                <ConnectionTableActions
+                                    trigger={
+                                        <MoreVertical className='h-4 w-4' />
+                                    }
+                                />
                             </td>
                         </tr>
                     ))}

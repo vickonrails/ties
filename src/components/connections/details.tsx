@@ -8,8 +8,12 @@ export function MetaDetails({ connection }: { connection: Connection }) {
     const { fullname } = connection
     return (
         <aside className='w-1/4 -mt-28 p-5'>
-            <ConnectionAvatar fullname={fullname} />
-            <div className='mb-4'>
+            <ConnectionAvatar
+                fullname={fullname}
+                size="lg"
+                border
+            />
+            <div className='my-4'>
                 <h1 className='text-lg font-bold'>{fullname}</h1>
                 <p className='text-sm'>Software Engineer</p>
             </div>
