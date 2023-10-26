@@ -24,11 +24,17 @@ function Dot({ className }: { className: string }) {
     )
 }
 
+type Size = 'sm' | 'md'
+
+const SIZE_LOOKUP = {
+    sm: 'p-1 px-2',
+    md: 'p-2 px-3'
+}
+
 // TODO: settle on more colors
 // TODO: refactor this component to avoid duplication
-export function ConnectionLevelColumn({ getValue }: CellContext<Connection, number>) {
-    const baseClasses = 'text-xs border p-1 px-2 rounded-sm inline-flex items-center gap-2'
-    const level = getValue()
+export function ConnectionLevelColumn({ level, size = 'sm' }: { level: number, size: Size }) {
+    const baseClasses = cn('text-xs border bg-white select-none  rounded-md inline-flex items-center gap-2', SIZE_LOOKUP[size])
     switch (level) {
         case 0:
             return (

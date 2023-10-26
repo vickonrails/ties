@@ -1,7 +1,8 @@
 import { BarChart4, HeartHandshake, PieChart } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./accordion";
+import { Connection } from "lib/types";
 
-export function DetailsAccordion() {
+export function DetailsAccordion({ connection }: { connection: Connection }) {
     return (
         <Accordion type='single' collapsible>
             <AccordionItem value="item-1">
@@ -15,7 +16,7 @@ export function DetailsAccordion() {
                 </AccordionTrigger>
 
                 <AccordionContent>
-                    We met at a party last week.
+                    {connection.origincontext ?? '-'}
                 </AccordionContent>
             </AccordionItem>
 
@@ -27,7 +28,7 @@ export function DetailsAccordion() {
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    I can help them scale their business, since they have a youtube channel. I can help them share their content whenever
+                    {connection.valuetothem ?? '-'}
                 </AccordionContent>
             </AccordionItem>
 
@@ -39,7 +40,7 @@ export function DetailsAccordion() {
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    {connection.valuetome ?? '-'}
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

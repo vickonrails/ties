@@ -1,20 +1,17 @@
 import ConnectionTableActions from "@/components/connections/table-options"
 import { useNavigate } from "@tanstack/react-router"
 import { Table, flexRender } from "@tanstack/react-table"
+import { Connection } from "lib/types"
 import { MoreVertical } from "lucide-react"
 import CreateUpdateConnectionDialog from "../create-connection"
 import { useDialog } from "../hooks/use-dialog"
 import ConnectionDeleteModal from "../modals/delete-modal"
 import { TableActions } from "./table"
-import { Connection } from "lib/types"
 
 const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, actions: TableActions<T> }) => {
     const { onDelete } = actions
     const { isOpen, showDialog, setIsOpen } = useDialog<Connection>({});
-    const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog({});
-
-    console.log({ entity })
-
+    const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog<Connection>({});
     const navigate = useNavigate()
     const navigateToConnection = (id: string) => {
         navigate({ to: '/app/$connectionId', params: { connectionId: id } })

@@ -18,7 +18,7 @@ export function DetailsContext({ connection }: { connection: Connection }) {
         <main className='flex-1 flex flex-col gap-4'>
             <div className='p-6 border rounded'>
                 <div className='mb-4'>
-                    <DetailsAccordion />
+                    <DetailsAccordion connection={connection} />
                 </div>
                 <SharedInterests
                     sharedInterests={sharedInterests}

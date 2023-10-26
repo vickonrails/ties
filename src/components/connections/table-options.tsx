@@ -17,13 +17,13 @@ const ConnectionTableActions = ({ trigger, actions = {}, connection }: Connectio
 
     return (
         <Menubar onClick={e => e.stopPropagation()}>
-            <MenubarMenu >
+            <MenubarMenu>
                 <MenubarTrigger
                     className="p-1 hover:cursor-pointer outline-none hover:outline-1 hover:outline-gray-200" onClick={e => e.stopPropagation()}
                 >
                     {trigger}
                 </MenubarTrigger>
-                <MenubarContent>
+                <MenubarContent align="end">
                     <MenubarItem
                         className="text-gray-600"
                         icon={<PencilLine className="w-4 h-4" />}

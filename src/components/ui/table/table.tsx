@@ -5,7 +5,7 @@ import TableBody from './table-body';
 import { ConnectionLevelColumn, LocationColumn, TextColumn } from './table-columns';
 import { TableHeader } from './table-header';
 
-const columns: ColumnDef<Connection, unknown>[] = [
+const columns: ColumnDef<Connection, JSX.Element>[] = [
     {
         accessorKey: 'fullname',
         header: 'Name',
@@ -19,17 +19,17 @@ const columns: ColumnDef<Connection, unknown>[] = [
     {
         accessorKey: 'timezone',
         header: 'Timezone',
-        cell: (props) => <p>{props.getValue() as string ?? '-'}</p>
+        cell: ({ getValue }) => <p>{getValue<string>()?.toUpperCase()}</p>
     },
     {
         accessorKey: 'friendshiplevel',
         header: 'Level',
-        cell: ConnectionLevelColumn
+        cell: ({ getValue }) => <ConnectionLevelColumn level={getValue<number>()} />
     },
     {
         accessorKey: 'created_at',
         header: 'Added',
-        cell: ({ getValue }) => <p>{getValue() as string ?? '-'}</p>
+        cell: ({ getValue }) => <p>{getValue() ?? '-'}</p>
     }
 ]
 

@@ -41,6 +41,5 @@ export function useDialog<T extends BaseEntity>(initialProps: DialogHookProps) {
         setIsOpen(false)
     }, [])
 
-
     return { loading, showDialog, setIsOpen, onCancel, onOkFn, entity, isOpen }
 }

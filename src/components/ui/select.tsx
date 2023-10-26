@@ -116,22 +116,38 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 //   SelectSeparator,
 // }
 
-export function Select() {
+interface SelectProps extends SelectPrimitive.SelectProps {
+  options: { value: string, label: string, icon?: React.ReactNode }[]
+  title?: string
+  className?: string
+  containerClasses?: string
+  label?: string
+}
+
+export function Select({ options, className, containerClasses, label, title, ...rest }: SelectProps) {
   return (
-    <SelectPrimitive.Root>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
-        </SelectGroup>
-      </SelectContent>
+    <SelectPrimitive.Root {...rest}>
+      <label className={containerClasses}>
+        {label && (
+          <div className="select-none text-muted-foreground text-sm mb-2">{label}</div>
+        )}
+        <SelectTrigger className={className}>
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {title && <SelectLabel>{title}</SelectLabel>}
+            {options.map(({ label, value, icon }) => (
+              <SelectItem value={value}>
+                {icon && (
+                  <SelectPrimitive.SelectIcon className="mr-2">{icon}</SelectPrimitive.SelectIcon>
+                )}
+                <span>{label}</span>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </label>
     </SelectPrimitive.Root>
   )
 }
