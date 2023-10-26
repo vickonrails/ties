@@ -75,7 +75,6 @@ function getSizeValues(size: Size): { dimensions: string, textSize: string } {
 export function ConnectionAvatar({ fullname, size = 'sm', border, ...rest }: ConnectionAvatarProps) {
   const { dimensions, textSize } = getSizeValues(size)
   const background = hashColors(fullname);
-  console.log({ background })
   return (
     <Avatar className={
       cn(dimensions, border && 'border-white border-4')}

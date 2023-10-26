@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui";
 import CreateUpdateConnectionDialog from "@/components/ui/create-connection";
+import { useDialog } from "@/components/ui/hooks/use-dialog";
 import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table/table";
 import { supabase } from "@/core/supabase";
@@ -10,8 +11,9 @@ import { useEffect, useState } from "react";
 export type Connection = Database['public']['Tables']['connection']['Row']
 
 export default function Connections() {
+    const { isOpen, showDialog, setIsOpen } = useDialog({});
     const [connections, setConnections] = useState<Connection[]>([])
-    const [modalOpen, setModalOpen] = useState(false)
+    // const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
         supabase.from('connection').select().then(res => {
@@ -19,9 +21,9 @@ export default function Connections() {
         })
     }, [])
 
-    const openCreateConnectionDialog = () => {
-        setModalOpen(true)
-    }
+    // const openCreateConnectionDialog = () => {
+    //     setModalOpen(true)
+    // }
 
     const onEdit = (item: unknown) => {
         console.log(`Deleting ${item}`)
@@ -38,7 +40,7 @@ export default function Connections() {
                 <div className="flex justify-center items-center">
                     <Button
                         variant='outline'
-                        onClick={openCreateConnectionDialog}
+                        onClick={_ => showDialog()}
                     >
                         Add Connection
                     </Button>
@@ -53,8 +55,8 @@ export default function Connections() {
                 actions={{ onEdit, onDelete }}
             />
             <CreateUpdateConnectionDialog
-                open={modalOpen}
-                onOpenChange={setModalOpen}
+                open={isOpen}
+                onOpenChange={setIsOpen}
             />
         </Layout>
     )

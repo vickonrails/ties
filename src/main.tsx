@@ -49,7 +49,6 @@ const appRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'app',
   beforeLoad: async () => {
-    console.log(`Calling from index route`)
     if (!await isAuthenticated()) {
       throw redirect({
         to: '/auth',

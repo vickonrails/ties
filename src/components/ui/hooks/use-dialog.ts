@@ -31,10 +31,10 @@ export function useDialog<T extends BaseEntity>(initialProps: DialogHookProps) {
         })
     }, [initialProps, onOk, entity])
 
-    const showDialog = useCallback((item: T) => {
+    const showDialog = (item?: T) => {
+        setEntity(item ?? null)
         setIsOpen(true);
-        setEntity(item)
-    }, [])
+    }
 
     const onCancel = useCallback(() => {
         setEntity(null)

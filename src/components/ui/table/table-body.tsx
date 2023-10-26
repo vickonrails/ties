@@ -10,8 +10,10 @@ import { Connection } from "lib/types"
 
 const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, actions: TableActions<T> }) => {
     const { onDelete } = actions
-    const { isOpen, showDialog, setIsOpen } = useDialog({});
-    const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen } = useDialog({});
+    const { isOpen, showDialog, setIsOpen } = useDialog<Connection>({});
+    const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog({});
+
+    console.log({ entity })
 
     const navigate = useNavigate()
     const navigateToConnection = (id: string) => {
@@ -47,6 +49,7 @@ const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, 
 
             <CreateUpdateConnectionDialog
                 open={isEditDialogOpen}
+                connection={entity!}
                 onOpenChange={setEditDialogOpen}
             />
 
