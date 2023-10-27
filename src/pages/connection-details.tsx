@@ -7,11 +7,43 @@ import { Layout } from '@/components/ui/layout'
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar'
 import ConnectionDeleteModal from '@/components/ui/modals/delete-modal'
 import { ConnectionLevelColumn } from '@/components/ui/table/table-columns'
-import { Link, RouteProps, useRouter } from '@tanstack/react-router'
+import { supabase } from '@/core/supabase'
+import { Link, useRouter } from '@tanstack/react-router'
 import { Connection } from 'lib/types'
 import { ChevronLeft, MoreVertical, PencilLine, Trash } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-function ConnectionDetails({ useLoader }: RouteProps<{ connection: Connection }>) {
+
+async function fetchConnections(id?: string) {
+    let query = supabase.from('connection').select();
+
+    if (id) {
+        query = query.eq('id', id);
+    }
+
+    return await query;
+}
+
+export function useConnections(id?: string) {
+    const [connection, setConnection] = useState<Connection[] | null>()
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetchConnections(id).then(res => {
+            setConnection(res.data)
+        }).catch().finally(() => {
+            setLoading(false)
+        })
+    }, [id])
+
+    return { loading, connection }
+}
+
+// @ts-ignore
+function ConnectionDetails({ useParams }) {
+    const { connectionId } = useParams()
+    const { loading, connection: connectionArr } = useConnections(connectionId)
+    const connection = connectionArr?.[0]
     const {
         isOpen: updateOpen,
         showDialog: showUpdateDialog,
@@ -25,23 +57,26 @@ function ConnectionDetails({ useLoader }: RouteProps<{ connection: Connection }>
         setIsOpen: setDeleteOpen
     } = useDialog<Connection>({});
 
-    const { connection } = useLoader()
     return (
         <Layout>
             <BackButton />
-            <div className='mb-10'>
-                <div className='bg-gray-100 w-full h-72 flex justify-end items-start p-4'>
-                    <section className='flex items-center'>
-                        <ConnectionLevelColumn size='md' level={connection.friendshiplevel ?? 0} />
-                        <Menu onEditClick={showUpdateDialog} onDeleteClick={showDeleteDialog} connection={connection} />
+            {connection ? (
+                <>
+                    <div className='mb-10'>
+                        <div className='bg-gray-100 w-full h-72 flex justify-end items-start p-4'>
+                            <section className='flex items-center'>
+                                <ConnectionLevelColumn size='md' level={connection?.friendship_level ?? 0} />
+                                <Menu onEditClick={showUpdateDialog} onDeleteClick={showDeleteDialog} connection={connection!} />
+                            </section>
+                        </div>
+                    </div>
+                    <section className='flex gap-4 h-full'>
+                        <MetaDetails connection={connection} />
+                        <DetailsContext connection={connection} />
+                        <ContactInfo connection={connection} />
                     </section>
-                </div>
-            </div>
-            <section className='flex gap-4 h-full'>
-                <MetaDetails connection={connection} />
-                <DetailsContext connection={connection} />
-                <ContactInfo connection={connection} />
-            </section>
+                </>
+            ) : <p>Loading...</p>}
 
             <CreateUpdateConnectionDialog
                 open={updateOpen}

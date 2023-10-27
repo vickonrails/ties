@@ -33,7 +33,7 @@ const SIZE_LOOKUP = {
 
 // TODO: settle on more colors
 // TODO: refactor this component to avoid duplication
-export function ConnectionLevelColumn({ level, size = 'sm' }: { level: number, size: Size }) {
+export function ConnectionLevelColumn({ level, size = 'sm' }: { level: number, size?: Size }) {
     const baseClasses = cn('text-xs border bg-white select-none  rounded-md inline-flex items-center gap-2', SIZE_LOOKUP[size])
     switch (level) {
         case 0:

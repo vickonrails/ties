@@ -22,7 +22,7 @@ export function MetaDetails({ connection }: { connection: Connection }) {
 
             <h4 className='mb-2 text-sm font-medium'>TAGS</h4>
             <div className='flex flex-wrap'>
-                {tags.map(tag => <Tag label={tag} />)}
+                {tags.map(tag => <Tag key={tag} label={tag} />)}
             </div>
         </aside>
     )

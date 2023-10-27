@@ -10,6 +10,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 import { Select } from './select'
 import { countryOptions } from '@/lib/countries'
 
+const reachoutFreqOptions = [
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'yearly', label: 'Yearly' },
+]
+
 const CreateUpdateConnectionDialog = ({ open, connection, ...rest }: DialogProps & { connection?: Connection }) => {
     const closeForm = () => {
         rest.onOpenChange?.(false)
@@ -57,8 +63,8 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
     const onSubmit = async (data: ConnectionInsert) => {
         try {
             const isEditing = !!defaultValues;
-            const { error } = isEditing ? await supabase.from('connection').update({ ...data, friendshiplevel: 0 }).eq('id', data.id!) :
-                await supabase.from('connection').insert({ ...data, friendshiplevel: 0 })
+            const { error } = isEditing ? await supabase.from('connection').update({ ...data, friendship_level: 0 }).eq('id', data.id!) :
+                await supabase.from('connection').insert({ ...data, friendship_level: 0 })
             if (error) throw error;
 
             onSubmitSuccessful();
@@ -97,6 +103,14 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                         />
                     </div>
 
+                    <Input
+                        autoFocus
+                        placeholder='Email Address'
+                        label='Email Address'
+                        containerProps={{ className: 'w-[45%]' }}
+                        {...register('email_address')}
+                    />
+
                     {/* <Input placeholder='Occupation' /> */}
                     <Textarea
                         placeholder='Bio'
@@ -108,43 +122,61 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                 <TabsContent value="context" className='px-4 flex flex-col items-stretch gap-4 data-[state=inactive]:hidden flex-grow'>
                     <Textarea
                         label='How did you meet?'
-                        {...register('origincontext')}
+                        {...register('origin_context')}
                     />
                     <Textarea
                         label='What value can they give you?'
-                        {...register('valuetome')}
+                        {...register('value_to_me')}
                     />
                     <Textarea
                         label='What value can you give them?'
-                        {...register('valuetothem')}
+                        {...register('value_to_them')}
                     />
                 </TabsContent>
 
-                <TabsContent value="contact" className='px-4 flex gap-4 items-start flex-1 data-[state=inactive]:hidden'>
-                    <Controller
-                        name='country'
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <Select
-                                containerClasses='flex-1'
-                                label='Country'
-                                className='max-w-x'
-                                onValueChange={onChange}
-                                options={countryListOptions}
-                            />
-                        )}
-                    />
+                <TabsContent value="contact" className='px-4 flex flex-wrap flex-col items-start flex-1 data-[state=inactive]:hidden'>
+                    <div className='flex w-full mb-4 gap-3'>
+                        <Controller
+                            name='country'
+                            control={control}
+                            render={({ field: { onChange } }) => (
+                                <Select
+                                    containerClasses='flex-1'
+                                    label='Country'
+                                    className='max-w-x'
+                                    onValueChange={onChange}
+                                    options={countryListOptions}
+                                />
+                            )}
+                        />
+
+                        <Controller
+                            name='timezone'
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <Select
+                                    containerClasses='flex-1'
+                                    label='Timezone'
+                                    className='max-w-xs'
+                                    onValueChange={onChange}
+                                    options={timezones}
+                                    value={value ?? ''}
+                                />
+                            )}
+                        />
+                    </div>
 
                     <Controller
-                        name='timezone'
+                        // TODO: rename to reachout freq
+                        name='contactfrequency'
                         control={control}
                         render={({ field: { onChange, value } }) => (
                             <Select
-                                containerClasses='flex-1'
-                                label='Timezone'
+                                containerClasses='w-[45%]'
+                                label='Reachout Frequency'
                                 className='max-w-xs'
                                 onValueChange={onChange}
-                                options={timezones}
+                                options={reachoutFreqOptions}
                                 value={value ?? ''}
                             />
                         )}

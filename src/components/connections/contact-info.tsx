@@ -44,19 +44,21 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                     <p className='font-medium mb-2'>Contact Information</p>
                     <ul>
                         {contactInfo.map(info => (
-                            <li><a
-                                href={info.value}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                className='flex gap-1 items-center underline'
-                            >
-                                {info.icon}
-                                {info.type}
-                            </a></li>
+                            <li key={info.value}>
+                                <a
+                                    href={info.value}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                    className='flex gap-1 items-center underline'
+                                >
+                                    {info.icon}
+                                    {info.type}
+                                </a>
+                            </li>
                         ))}
                     </ul>
                 </div>
             </section>
-        </aside>
+        </aside >
     )
 }

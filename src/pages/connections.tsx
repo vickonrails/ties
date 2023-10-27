@@ -3,28 +3,15 @@ import CreateUpdateConnectionDialog from "@/components/ui/create-connection";
 import { useDialog } from "@/components/ui/hooks/use-dialog";
 import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table/table";
-import { supabase } from "@/core/supabase";
 import { Database } from "lib/database.types";
 import { MoreVertical } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useConnections } from "./connection-details";
 
 export type Connection = Database['public']['Tables']['connection']['Row']
 
 export default function Connections() {
     const { isOpen, showDialog, setIsOpen } = useDialog({});
-    const [connections, setConnections] = useState<Connection[]>([])
-    // const [modalOpen, setModalOpen] = useState(false)
-
-    useEffect(() => {
-        supabase.from('connection').select().then(res => {
-            setConnections(res.data ?? [])
-        })
-    }, [])
-
-    // const openCreateConnectionDialog = () => {
-    //     setModalOpen(true)
-    // }
-
+    const { loading, connection } = useConnections()
     const onEdit = (item: unknown) => {
         console.log(`Deleting ${item}`)
     }
@@ -44,16 +31,18 @@ export default function Connections() {
                     >
                         Add Connection
                     </Button>
-                    <button>
+                    {/* <button>
                         <MoreVertical />
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
             <ConnectionsTable
-                connections={connections}
+                connections={connection!}
                 actions={{ onEdit, onDelete }}
+                loading={loading}
             />
+
             <CreateUpdateConnectionDialog
                 open={isOpen}
                 onOpenChange={setIsOpen}

@@ -22,7 +22,7 @@ const columns: ColumnDef<Connection, JSX.Element>[] = [
         cell: ({ getValue }) => <p>{getValue<string>()?.toUpperCase()}</p>
     },
     {
-        accessorKey: 'friendshiplevel',
+        accessorKey: 'friendship_level',
         header: 'Level',
         cell: ({ getValue }) => <ConnectionLevelColumn level={getValue<number>()} />
     },
@@ -43,10 +43,11 @@ export interface TableActions<T> {
 interface ConnectionsTableProps<T> {
     connections: Connection[],
     actions: TableActions<T>
+    loading?: boolean
 }
 
 // Empty state for table
-const ConnectionsTable = ({ connections: data, actions }: ConnectionsTableProps<Connection>) => {
+const ConnectionsTable = ({ connections: data, actions, loading }: ConnectionsTableProps<Connection>) => {
     const table = useReactTable<Connection>({
         data,
         columns,
@@ -61,6 +62,7 @@ const ConnectionsTable = ({ connections: data, actions }: ConnectionsTableProps<
                 />
                 <TableBody<Connection>
                     table={table}
+                    loading={loading}
                     actions={actions}
                 />
             </table>

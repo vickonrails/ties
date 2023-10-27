@@ -8,13 +8,17 @@ import { useDialog } from "../hooks/use-dialog"
 import ConnectionDeleteModal from "../modals/delete-modal"
 import { TableActions } from "./table"
 
-const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, actions: TableActions<T> }) => {
+const TableBody = <T extends Connection>({ table, actions, loading }: { table: Table<T>, actions: TableActions<T>, loading?: boolean }) => {
     const { onDelete } = actions
     const { isOpen, showDialog, setIsOpen } = useDialog<Connection>({});
     const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog<Connection>({});
     const navigate = useNavigate()
     const navigateToConnection = (id: string) => {
         navigate({ to: '/app/$connectionId', params: { connectionId: id } })
+    }
+
+    if (loading) {
+        return <LoadingState table={table} />
     }
 
     return (
@@ -28,7 +32,9 @@ const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, 
                     >
                         {row.getVisibleCells().map(cell => (
                             <td key={cell.id} className='py-4 px-4 text-sm text-gray-500'>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                {loading ? 'loading...' :
+                                    <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
+                                }
                             </td>
                         ))}
                         <td className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
@@ -56,6 +62,22 @@ const TableBody = <T extends Connection>({ table, actions }: { table: Table<T>, 
             />
         </>
 
+    )
+}
+
+function LoadingState<T>({ table }: { table: Table<T> }) {
+    return (
+        <tbody>
+            {table.getHeaderGroups().map(headerGroups => (
+                <>
+                    {headerGroups.headers.map(header => (
+                        <th className='font-normal text-left text-sm p-3 px-4 text-gray-600' key={header.id}>
+                            Loading...
+                        </th>
+                    ))}
+                </>
+            ))}
+        </tbody>
     )
 }
 

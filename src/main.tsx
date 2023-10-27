@@ -80,15 +80,6 @@ export type RouteProps = {
 const connectionDetails = new Route({
   getParentRoute: () => appRoute,
   path: '$connectionId',
-  // TODO: fix the correct types here
-  // @ts-ignore
-  loader: async ({ params }: RouteProps) => {
-    const connection = ((await supabase.from('connection').select().eq('id', params.connectionId)))
-
-    return {
-      connection: connection?.data?.[0]
-    }
-  },
   component: ConnectionDetails,
 })
 

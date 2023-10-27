@@ -6,23 +6,26 @@ export const connections: ConnectionInsert[] = [
         birthday: 'Tue Oct 24 2023',
         country: 'Nigeria',
         city: 'Lagos',
-        friendshiplevel: 0,
+        friendship_level: 0,
         timezone: 'GMT+1',
+        email_address: 'victor@gmail.com'
     },
     {
         fullname: 'Random person',
         birthday: 'Tue Oct 24 2023',
         country: 'Germany',
         city: 'Lagos',
-        friendshiplevel: 1,
-        timezone: 'GMT+1'
+        friendship_level: 1,
+        timezone: 'GMT+1',
+        email_address: 'victor@gmail.com'
     },
     {
         fullname: 'Another one',
         birthday: 'Tue Oct 24 2023',
         country: 'Nigeria',
         city: 'Lagos',
-        friendshiplevel: 1,
-        timezone: 'GMT+1'
+        friendship_level: 1,
+        timezone: 'GMT+1',
+        email_address: 'victor@gmail.com'
     }
 ]

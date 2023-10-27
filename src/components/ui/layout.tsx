@@ -18,14 +18,10 @@ export function Layout({ children }: { children: ReactNode }) {
                     <p>Ties</p>
                 </Link>
 
-                {/* <div className="flex-1">
-                    <Link to='/app'>Friends</Link>
-                </div> */}
-
                 <Button size='sm' onClick={handleLogout}>Log Out</Button>
             </nav>
 
-            <main className="px-7 h-full max-w-7xl m-auto w-full">
+            <main className="px-7 h-full max-w-7xl m-auto w-full min-h-[500px]">
                 {children}
             </main>
 
