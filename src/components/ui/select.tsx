@@ -122,9 +122,10 @@ interface SelectProps extends SelectPrimitive.SelectProps {
   className?: string
   containerClasses?: string
   label?: string
+  placeholder?: string
 }
 
-export function Select({ options, className, containerClasses, label, title, ...rest }: SelectProps) {
+export function Select({ options, className, placeholder, containerClasses, label, title, ...rest }: SelectProps) {
   return (
     <SelectPrimitive.Root {...rest}>
       <label className={containerClasses}>
@@ -132,7 +133,7 @@ export function Select({ options, className, containerClasses, label, title, ...
           <div className="select-none text-muted-foreground text-sm mb-2">{label}</div>
         )}
         <SelectTrigger className={className}>
-          <SelectValue placeholder="Select a fruit" />
+          <SelectValue placeholder={placeholder ?? 'Select an option'} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

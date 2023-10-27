@@ -1,5 +1,8 @@
 import { Button, Input } from '@/components/ui'
-import { supabase } from '@/core/supabase'
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { Database } from 'lib/database.types';
+import { GetServerSideProps } from 'next';
 import { useForm } from 'react-hook-form'
 
 interface Input {
@@ -7,6 +10,7 @@ interface Input {
 }
 
 export default function Auth() {
+    const client = useSupabaseClient<Database>();
     const {
         register,
         handleSubmit,
@@ -14,9 +18,9 @@ export default function Auth() {
     } = useForm<Input>()
 
     const onSubmit = async ({ email }: Input) => {
-        const { error } = await supabase.auth.signInWithOtp({
+        const { error } = await client.auth.signInWithOtp({
             email,
-            options: { emailRedirectTo: 'http://localhost:5173/app' }
+            options: { emailRedirectTo: 'http://localhost:3000/api/auth/callback' }
         })
 
         if (error) {
@@ -99,3 +103,24 @@ function GithubButton() {
         </Button>
     )
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const supabase = createPagesServerClient<Database>(context);
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+            session
+        }
+    }
+}
+

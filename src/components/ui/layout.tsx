@@ -1,19 +1,21 @@
-import { supabase } from "@/core/supabase";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "lib/database.types";
 import { ReactNode } from "react";
 import { Button } from ".";
+import Link from "next/link";
 
 export function Layout({ children }: { children: ReactNode }) {
-    const navigate = useNavigate();
+    const client = useSupabaseClient<Database>()
+    // const navigate = useNavigate();
     const handleLogout = async () => {
-        await supabase.auth.signOut();
-        navigate({ to: '/auth' })
+        await client.auth.signOut();
+        // navigate({ to: '/auth' })
     }
 
     return (
         <div className="flex flex-col gap-6">
             <nav className="px-4 py-6 flex justify-between items-center gap-6">
-                <Link to='/app' className='flex gap-3'>
+                <Link href='/app' className='flex gap-3'>
                     <div className='h-6 w-6 bg-black' />
                     <p>Ties</p>
                 </Link>

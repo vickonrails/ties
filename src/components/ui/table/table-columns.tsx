@@ -1,7 +1,7 @@
-import { CellContext } from "@tanstack/react-table";
-import { ConnectionAvatar } from "../avatar";
-import { Connection } from "lib/types";
 import { cn } from "@/lib/utils";
+import { CellContext } from "@tanstack/react-table";
+import { Connection } from "lib/types";
+import { ConnectionAvatar } from "../avatar";
 
 export function TextColumn({ getValue }: CellContext<Connection, string>) {
     const value = getValue();

@@ -1,19 +1,20 @@
-import { supabase } from '@/core/supabase'
 import { DialogProps } from '@radix-ui/react-dialog'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { Database } from 'lib/database.types'
 import { Connection, ConnectionInsert } from 'lib/types'
 import { useRef } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Button, Input } from '.'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './dialog'
-import { Textarea } from './textarea'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
+import { useRefreshData } from './hooks/use-refresh-data'
 import { Select } from './select'
-import { countryOptions } from '@/lib/countries'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
+import { Textarea } from './textarea'
 
 const reachoutFreqOptions = [
-    { value: 'weekly', label: 'Weekly' },
-    { value: 'monthly', label: 'Monthly' },
-    { value: 'yearly', label: 'Yearly' },
+    { value: '0', label: 'Weekly' },
+    { value: '1', label: 'Monthly' },
+    { value: '2', label: 'Yearly' },
 ]
 
 const CreateUpdateConnectionDialog = ({ open, connection, ...rest }: DialogProps & { connection?: Connection }) => {
@@ -44,37 +45,38 @@ interface CreateConnectionFormProps extends React.HTMLAttributes<HTMLFormElement
     defaultValues?: ConnectionInsert
 }
 
-const timezones = [
-    { label: 'GMT+1', value: 'gmt+1' },
-    { label: 'GMT+2', value: 'gmt+2' },
+const friendship_level_options = [
+    { label: 'Acquintances', value: '0' },
+    { label: 'Casual Friends', value: '1' },
+    { label: 'Close Friends', value: '2' },
+    { label: 'Intimate Friends', value: '3' }
 ]
 
 const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: CreateConnectionFormProps) => {
     const formRef = useRef<HTMLFormElement>(null)
+    const client = useSupabaseClient<Database>()
+    const [refresh] = useRefreshData()
     const {
         register,
         handleSubmit,
         control,
-        formState: { isSubmitting },
-        watch
+        formState: { isSubmitting }
         // @ts-ignore
     } = useForm({ defaultValues: defaultValues })
 
     const onSubmit = async (data: ConnectionInsert) => {
         try {
             const isEditing = !!defaultValues;
-            const { error } = isEditing ? await supabase.from('connection').update({ ...data, friendship_level: 0 }).eq('id', data.id!) :
-                await supabase.from('connection').insert({ ...data, friendship_level: 0 })
+            const { error } = isEditing ? await client.from('connection').update({ ...data }).eq('id', data.id!) :
+                await client.from('connection').insert({ ...data })
             if (error) throw error;
 
+            refresh()
             onSubmitSuccessful();
         } catch {
             // TODO: handle error
         }
     }
-
-    // TODO: memoize
-    const countryListOptions = countryOptions();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} ref={formRef} {...rest}>
@@ -103,15 +105,30 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                         />
                     </div>
 
-                    <Input
-                        autoFocus
-                        placeholder='Email Address'
-                        label='Email Address'
-                        containerProps={{ className: 'w-[45%]' }}
-                        {...register('email_address')}
-                    />
+                    <div className='flex gap-3'>
+                        <Input
+                            placeholder='Email Address'
+                            label='Email Address'
+                            containerProps={{ className: 'w-[45%] flex-grow' }}
+                            {...register('email_address')}
+                        />
 
-                    {/* <Input placeholder='Occupation' /> */}
+                        <Controller
+                            name='friendship_level'
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <Select
+                                    containerClasses='w-[45%] flex-grow'
+                                    label='Connection Level'
+                                    className='max-w-xs'
+                                    onValueChange={ev => onChange(parseInt(ev))}
+                                    options={friendship_level_options}
+                                    value={String(value)}
+                                />
+                            )}
+                        />
+                    </div>
+
                     <Textarea
                         placeholder='Bio'
                         label='Bio (Overview)'
@@ -136,51 +153,38 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
 
                 <TabsContent value="contact" className='px-4 flex flex-wrap flex-col items-start flex-1 data-[state=inactive]:hidden'>
                     <div className='flex w-full mb-4 gap-3'>
-                        <Controller
-                            name='country'
-                            control={control}
-                            render={({ field: { onChange } }) => (
-                                <Select
-                                    containerClasses='flex-1'
-                                    label='Country'
-                                    className='max-w-x'
-                                    onValueChange={onChange}
-                                    options={countryListOptions}
-                                />
-                            )}
+                        <Input
+                            label='Country'
+                            containerProps={{ className: 'flex-1' }}
+                            {...register('country')}
                         />
-
-                        <Controller
-                            name='timezone'
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <Select
-                                    containerClasses='flex-1'
-                                    label='Timezone'
-                                    className='max-w-xs'
-                                    onValueChange={onChange}
-                                    options={timezones}
-                                    value={value ?? ''}
-                                />
-                            )}
+                        <Input
+                            label='Time Zone'
+                            containerProps={{ className: 'flex-1' }}
+                            {...register('timezone')}
                         />
                     </div>
 
                     <Controller
-                        // TODO: rename to reachout freq
-                        name='contactfrequency'
+                        name='contact_frequency'
                         control={control}
                         render={({ field: { onChange, value } }) => (
                             <Select
-                                containerClasses='w-[45%]'
-                                label='Reachout Frequency'
+                                containerClasses='w-1/2'
+                                label='Reach out Frequency'
                                 className='max-w-xs'
-                                onValueChange={onChange}
+                                onValueChange={val => onChange(parseInt(val))}
                                 options={reachoutFreqOptions}
-                                value={value ?? ''}
+                                value={String(value) ?? ''}
                             />
                         )}
                     />
+
+                    {/* <Input
+                        label='Birthday'
+                        containerProps={{ className: 'flex-1' }}
+                        {...register('birthday')}
+                    /> */}
                 </TabsContent>
             </Tabs>
 

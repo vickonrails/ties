@@ -29,6 +29,7 @@ export function useDialog<T extends BaseEntity>(initialProps: DialogHookProps) {
         }).finally(() => {
             setLoading(false)
         })
+
     }, [initialProps, onOk, entity])
 
     const showDialog = (item?: T) => {

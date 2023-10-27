@@ -27,6 +27,7 @@ export interface Database {
           interests: string[] | null
           occupation: string | null
           origin_context: string | null
+          reach_out_frequency: string | null
           timezone: string | null
           updated_at: string | null
           value_to_me: string | null
@@ -49,6 +50,7 @@ export interface Database {
           interests?: string[] | null
           occupation?: string | null
           origin_context?: string | null
+          reach_out_frequency?: string | null
           timezone?: string | null
           updated_at?: string | null
           value_to_me?: string | null
@@ -71,10 +73,41 @@ export interface Database {
           interests?: string[] | null
           occupation?: string | null
           origin_context?: string | null
+          reach_out_frequency?: string | null
           timezone?: string | null
           updated_at?: string | null
           value_to_me?: string | null
           value_to_them?: string | null
+        }
+        Relationships: []
+      }
+      reach_outs: {
+        Row: {
+          connection_id: string
+          created_at: string | null
+          email_address: string
+          id: string
+          message: string | null
+          type: number
+          updated_at: string | null
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string | null
+          email_address: string
+          id?: string
+          message?: string | null
+          type: number
+          updated_at?: string | null
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string | null
+          email_address?: string
+          id?: string
+          message?: string | null
+          type?: number
+          updated_at?: string | null
         }
         Relationships: []
       }

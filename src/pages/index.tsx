@@ -3,15 +3,15 @@ import CreateUpdateConnectionDialog from "@/components/ui/create-connection";
 import { useDialog } from "@/components/ui/hooks/use-dialog";
 import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table/table";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "lib/database.types";
 import { MoreVertical } from "lucide-react";
-import { useConnections } from "./connection-details";
+import { GetServerSideProps } from "next";
 
 export type Connection = Database['public']['Tables']['connection']['Row']
 
-export default function Connections() {
+export default function Index({ connections }: { connections: Connection[] }) {
     const { isOpen, showDialog, setIsOpen } = useDialog({});
-    const { loading, connection } = useConnections()
     const onEdit = (item: unknown) => {
         console.log(`Deleting ${item}`)
     }
@@ -31,16 +31,15 @@ export default function Connections() {
                     >
                         Add Connection
                     </Button>
-                    {/* <button>
+                    <button>
                         <MoreVertical />
-                    </button> */}
+                    </button>
                 </div>
             </div>
 
             <ConnectionsTable
-                connections={connection!}
+                connections={connections}
                 actions={{ onEdit, onDelete }}
-                loading={loading}
             />
 
             <CreateUpdateConnectionDialog
@@ -51,3 +50,28 @@ export default function Connections() {
     )
 }
 
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const supabase = createPagesServerClient<Database>(context);
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+        await supabase.auth.signOut();
+        return {
+            redirect: {
+                destination: '/auth',
+                permanent: false
+            }
+        }
+    }
+
+
+    const { data: connections } = await supabase.from('connection').select()
+
+    return {
+        props: {
+            session,
+            connections
+        }
+    }
+}

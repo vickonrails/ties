@@ -1,6 +1,8 @@
 import { Connection } from "lib/types"
 import { Linkedin, Twitter } from "lucide-react"
 import { Button } from "../ui"
+import { useDialog } from "../ui/hooks/use-dialog"
+import ReachoutModal from "../ui/modals/reachout-modal"
 
 const contactInfo = [
     { type: 'linkedin', value: 'https://linkedIn.com/in/victor-ofoegbu', icon: <Linkedin className='h-4 w-4' /> },
@@ -8,6 +10,7 @@ const contactInfo = [
 ]
 
 export function ContactInfo({ connection }: { connection: Connection }) {
+    const { isOpen, showDialog, setIsOpen } = useDialog({})
     const { country } = connection
     return (
         <aside className="w-1/4 flex flex-col gap-4">
@@ -16,7 +19,7 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                     <h3 className="text-md mb-2">Reachout</h3>
                     <p className="text-sm text-muted-foreground">Send a mail to <span className="font-medium">{connection.fullname}</span></p>
                 </div>
-                <Button>Reach Out</Button>
+                <Button onClick={() => showDialog(connection)} disabled={!connection.email_address}>Reach Out</Button>
             </section>
 
             <section className='border rounded flex flex-col gap-3 p-6'>
@@ -58,6 +61,12 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                         ))}
                     </ul>
                 </div>
+
+                <ReachoutModal
+                    open={isOpen}
+                    onOpenChange={setIsOpen}
+                    connection={connection}
+                />
             </section>
         </aside >
     )

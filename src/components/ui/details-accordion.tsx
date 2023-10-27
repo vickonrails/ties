@@ -16,7 +16,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                 </AccordionTrigger>
 
                 <AccordionContent>
-                    {connection.origincontext ?? '-'}
+                    {connection.origin_context ?? '-'}
                 </AccordionContent>
             </AccordionItem>
 
@@ -28,7 +28,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    {connection.valuetothem ?? '-'}
+                    {connection.value_to_them ?? '-'}
                 </AccordionContent>
             </AccordionItem>
 
@@ -40,7 +40,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    {connection.valuetome ?? '-'}
+                    {connection.value_to_me ?? '-'}
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
