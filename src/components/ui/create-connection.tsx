@@ -55,12 +55,12 @@ const friendship_level_options = [
 const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: CreateConnectionFormProps) => {
     const formRef = useRef<HTMLFormElement>(null)
     const client = useSupabaseClient<Database>()
-    const [refresh] = useRefreshData()
+    const refresh = useRefreshData()
     const {
         register,
         handleSubmit,
         control,
-        formState: { isSubmitting }
+        formState: { isSubmitting, errors }
         // @ts-ignore
     } = useForm({ defaultValues: defaultValues })
 
@@ -80,7 +80,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} ref={formRef} {...rest}>
-            <Tabs defaultValue='basic' orientation='vertical' className='flex min-h-[400px]'>
+            <Tabs defaultValue='basic' orientation='vertical' className='flex min-h-[400px] overflow-y-hidden max-h-[400px]'>
                 <TabsList className='border-r pr-4'>
                     <TabsTrigger value="basic">Basic Information</TabsTrigger>
                     <TabsTrigger value="context">Context</TabsTrigger>
@@ -94,13 +94,15 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                             placeholder='Fullname'
                             label='Fullname'
                             containerProps={{ className: 'w-[45%] flex-grow' }}
-                            {...register('fullname')}
+                            hint={errors.fullname?.message}
+                            {...register('fullname', { required: 'Connection name is required' })}
                         />
 
                         <Input
                             placeholder='Occupation'
                             label='Occupation'
                             containerProps={{ className: 'w-[45%] flex-grow' }}
+                            hint={errors.occupation?.message}
                             {...register('occupation')}
                         />
                     </div>
@@ -110,12 +112,14 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                             placeholder='Email Address'
                             label='Email Address'
                             containerProps={{ className: 'w-[45%] flex-grow' }}
-                            {...register('email_address')}
+                            hint={errors.email_address?.message}
+                            {...register('email_address', { required: 'Email address is required' })}
                         />
 
                         <Controller
                             name='friendship_level'
                             control={control}
+                            rules={{ required: 'Friendship level is required ' }}
                             render={({ field: { onChange, value } }) => (
                                 <Select
                                     containerClasses='w-[45%] flex-grow'
@@ -124,6 +128,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                                     onValueChange={ev => onChange(parseInt(ev))}
                                     options={friendship_level_options}
                                     value={String(value)}
+                                    hint={errors.friendship_level?.message}
                                 />
                             )}
                         />
@@ -136,7 +141,10 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                     />
                 </TabsContent>
 
-                <TabsContent value="context" className='px-4 flex flex-col items-stretch gap-4 data-[state=inactive]:hidden flex-grow'>
+                <TabsContent
+                    value="context"
+                    className='px-4 pb-4 flex flex-col items-stretch gap-4 data-[state=inactive]:hidden flex-grow overflow-y-auto h-[initial]'
+                >
                     <Textarea
                         label='How did you meet?'
                         {...register('origin_context')}
@@ -148,6 +156,21 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                     <Textarea
                         label='What value can you give them?'
                         {...register('value_to_them')}
+                    />
+                    <Input
+                        placeholder='Comma separated list of their interests'
+                        label='Interests'
+                        {...register('interests')}
+                    />
+                    <Input
+                        placeholder='Comma separated list of common interests'
+                        label='Common Interests'
+                        {...register('common_interests')}
+                    />
+                    <Input
+                        placeholder='Enter tags'
+                        label='Tags'
+                        {...register('tags')}
                     />
                 </TabsContent>
 
@@ -168,6 +191,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                     <Controller
                         name='contact_frequency'
                         control={control}
+                        defaultValue={'1'}
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 containerClasses='w-1/2'
@@ -176,19 +200,17 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                                 onValueChange={val => onChange(parseInt(val))}
                                 options={reachoutFreqOptions}
                                 value={String(value) ?? ''}
+                                hint={errors.contact_frequency?.message}
                             />
                         )}
                     />
-
-                    {/* <Input
-                        label='Birthday'
-                        containerProps={{ className: 'flex-1' }}
-                        {...register('birthday')}
-                    /> */}
                 </TabsContent>
             </Tabs>
 
-            <DialogFooter>
+            <DialogFooter className='justify-between items-center gap-2'>
+                {/* <div>
+                    {!isSubmitSuccessful && (<p className='text-destructive text-sm'>Fields marked with * are required</p>)}
+                </div> */}
                 <Button loading={isSubmitting}>
                     {defaultValues ? 'Update Connection' : 'Create Connection'}
                 </Button>

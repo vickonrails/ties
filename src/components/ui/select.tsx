@@ -123,9 +123,10 @@ interface SelectProps extends SelectPrimitive.SelectProps {
   containerClasses?: string
   label?: string
   placeholder?: string
+  hint?: string
 }
 
-export function Select({ options, className, placeholder, containerClasses, label, title, ...rest }: SelectProps) {
+export function Select({ options, hint, className, placeholder, containerClasses, label, title, ...rest }: SelectProps) {
   return (
     <SelectPrimitive.Root {...rest}>
       <label className={containerClasses}>
@@ -135,6 +136,11 @@ export function Select({ options, className, placeholder, containerClasses, labe
         <SelectTrigger className={className}>
           <SelectValue placeholder={placeholder ?? 'Select an option'} />
         </SelectTrigger>
+
+        {hint && (
+          <p className="text-sm mt-2 text-destructive">{hint}</p>
+        )}
+
         <SelectContent>
           <SelectGroup>
             {title && <SelectLabel>{title}</SelectLabel>}

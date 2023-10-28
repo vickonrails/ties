@@ -6,10 +6,11 @@ export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
   containerProps?: React.HTMLAttributes<HTMLLabelElement>
+  hint?: string
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, containerProps, label, ...props }, ref) => {
+  ({ className, containerProps, label, hint, ...props }, ref) => {
     return (
       <label {...containerProps}>
         {label && <div className="select-none text-sm mb-2 text-muted-foreground">{label}</div>}
@@ -21,6 +22,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           {...props}
         />
+
+        {hint && (
+          <p className="text-sm mt-2 text-destructive">{hint}</p>
+        )}
       </label>
     )
   }
