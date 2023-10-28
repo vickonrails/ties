@@ -22,7 +22,7 @@ const connect = () => {
 // TODO: Priority by default is mid or medium
 // TODO: seed the rating column
 
-const seedJobs = async (client: SupabaseClient<Database>) => {
+const seedConnections = async (client: SupabaseClient<Database>) => {
     const promises = connections.map(async connection => {
         const { data, error } = await client.from('connection').insert({ ...connection });
         if (error) {
@@ -41,7 +41,7 @@ const seedJobs = async (client: SupabaseClient<Database>) => {
 const seed = () => {
     try {
         const client = connect();
-        seedJobs(client)
+        seedConnections(client)
             .then(res => res)
             .catch(err => {
                 throw err;
