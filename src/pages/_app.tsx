@@ -6,16 +6,6 @@ import { type Database } from '../../lib/database.types'
 
 import '../../src/index.css'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-// const queryClient = new QueryClient({
-//     defaultOptions: {
-//         queries: {
-//             retry: 0
-//         }
-//     }
-// })
-
 function MyApp({
     Component,
     pageProps,
@@ -29,9 +19,7 @@ function MyApp({
             supabaseClient={supabaseClient}
             initialSession={pageProps.initialSession}
         >
-            {/* <QueryClientProvider client={queryClient}> */}
             <Component {...pageProps} />
-            {/* </QueryClientProvider> */}
         </SessionContextProvider>
     )
 }

@@ -189,23 +189,11 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
             </Tabs>
 
             <DialogFooter>
-                <CTA
-                    defaultValues={defaultValues}
-                    loading={isSubmitting}
-                />
+                <Button loading={isSubmitting}>
+                    {defaultValues ? 'Update Connection' : 'Create Connection'}
+                </Button>
             </DialogFooter>
         </form >
-    )
-}
-
-function CTA<T>({ defaultValues, loading }: { loading: boolean, defaultValues: T }) {
-    if (defaultValues) {
-        return (
-            <Button type="submit">{loading ? 'Updating' : 'Update Connection'}</Button>
-        )
-    }
-    return (
-        <Button type="submit">{loading ? 'Creating' : 'Create Connection'}</Button>
     )
 }
 

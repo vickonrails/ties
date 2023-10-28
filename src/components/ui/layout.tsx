@@ -1,15 +1,17 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "lib/database.types";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import { Button } from ".";
-import Link from "next/link";
 
 export function Layout({ children }: { children: ReactNode }) {
     const client = useSupabaseClient<Database>()
-    // const navigate = useNavigate();
+    const router = useRouter()
+
     const handleLogout = async () => {
         await client.auth.signOut();
-        // navigate({ to: '/auth' })
+        router.push('/auth');
     }
 
     return (
