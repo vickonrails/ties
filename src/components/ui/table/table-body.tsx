@@ -1,18 +1,24 @@
 import ConnectionTableActions from "@/components/connections/table-options"
+import { SupabaseClient } from "@supabase/supabase-js"
 import { Table, flexRender } from "@tanstack/react-table"
+import { Database } from "lib/database.types"
 import { Connection } from "lib/types"
 import { MoreVertical } from "lucide-react"
 import { useRouter } from "next/router"
 import CreateUpdateConnectionDialog from "../create-connection"
 import { useDialog } from "../hooks/use-dialog"
+import { useRefreshData } from "../hooks/use-refresh-data"
+import ConnectionHistoryModal from "../modals/connection-history-modal"
 import ConnectionDeleteModal from "../modals/delete-modal"
 import ReachOutModal from "../modals/reachout-modal"
-import { TableActions } from "./table"
-import ConnectionHistoryModal from "../modals/connection-history-modal"
 
-const TableBody = <T extends Connection>({ table, actions, loading }: { table: Table<T>, actions: TableActions<T>, loading?: boolean }) => {
-    const { onDelete } = actions
-    const { isOpen, showDialog, setIsOpen } = useDialog<Connection>({});
+export async function DeleteConnection(client: SupabaseClient<Database>, id: string) {
+    return (await client.from('connection').delete().eq('id', id)).data;
+}
+
+const TableBody = <T extends Connection>({ table, loading }: { table: Table<T>, loading?: boolean }) => {
+    const refresh = useRefreshData()
+    const { isOpen, loading: isDeleting, showDialog, setIsOpen, entity: connectionToDelete, onOkFn: onDelete } = useDialog<Connection>({ onOk: DeleteConnection, refresh });
     const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog<Connection>({});
     const { isOpen: reachOutOpen, showDialog: showReachOutDialog, setIsOpen: setReachOutDialogOpen, entity: reachOutConnection } = useDialog<Connection>({});
     const { isOpen: historyDialogOpen, showDialog: showHistoryDialog, setIsOpen: setHistoryDialogOpen, entity: historyDialogEntity } = useDialog<Connection>({});
@@ -63,7 +69,10 @@ const TableBody = <T extends Connection>({ table, actions, loading }: { table: T
 
             <ConnectionDeleteModal
                 open={isOpen}
+                connection={connectionToDelete!}
                 onOpenChange={setIsOpen}
+                onOk={onDelete}
+                isDeleting={isDeleting}
             />
 
             <ReachOutModal

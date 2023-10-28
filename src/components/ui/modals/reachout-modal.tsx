@@ -4,7 +4,7 @@ import { Database } from "lib/database.types"
 import { Connection, ReachOutInsert } from "lib/types"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { Button } from ".."
+import { Button, Input } from ".."
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../dialog"
 import { Select } from "../select"
 import { Textarea } from "../textarea"
@@ -28,7 +28,7 @@ async function sendMail(options: MailOptions) {
 const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps & { connection: Connection }) => {
     const session = useSession()
     const client = useSupabaseClient<Database>()
-    const { handleSubmit, control, register, formState: { isSubmitting }, reset } = useForm<ReachOutInsert>();
+    const { handleSubmit, control, register, formState: { isSubmitting, errors }, reset } = useForm<ReachOutInsert>();
     const [formError, setFormError] = useState('')
 
     useEffect(() => {
@@ -41,10 +41,10 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
     if (!session) return;
 
     const onSubmit = async (data: ReachOutInsert) => {
-        const { email_address, id: connection_id, fullname } = connection
+        const { message, subject } = data
+        const { id: connection_id, email_address } = connection
         try {
-            // TODO: error handling
-            await sendMail({ from: session.user.email!, fullname, subject: 'Hello there', to: email_address })
+            await sendMail({ from: session.user.email!, subject, to: email_address, message })
             const { error } = await client.from('reach_outs').insert({ ...data, email_address, connection_id })
             if (error) throw error;
             onOpenChange?.(false);
@@ -58,9 +58,9 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
         <Dialog open={open} onOpenChange={onOpenChange} {...rest}>
             <DialogContent>
                 <DialogHeader className="mb-3">
-                    <DialogTitle>Reach out to {connection?.fullname}</DialogTitle>
-                    <DialogDescription>
-                        Are you sure you want to delete this connection
+                    <DialogTitle>Reach out</DialogTitle>
+                    <DialogDescription className="max-w-xs">
+                        Send a mail to {connection?.fullname} either sharing an update or just checking up.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -68,19 +68,22 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
                     <Controller
                         name='type'
                         control={control}
+                        rules={{ required: 'Reach out type is required' }}
                         render={({ field: { onChange, value } }) => (
                             <Select
-                                label="Connection Level"
+                                label="Reachout Type"
                                 className="w-[45%] flex-grow"
                                 placeholder="Select reach out type"
                                 options={options}
                                 onValueChange={ev => onChange(parseInt(ev))}
                                 value={String(value)}
+                                hint={errors.type?.message}
                             />
                         )}
                     />
 
-                    <Textarea label="Reach out message" {...register('message')} />
+                    <Input label="Message subject" {...register('subject', { required: 'A message subject is required' })} />
+                    <Textarea label="Reach out message" {...register('message', { required: 'Message body is required' })} />
 
                     {formError && (<p>{formError}</p>)}
 

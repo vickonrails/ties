@@ -12,13 +12,6 @@ export type Connection = Database['public']['Tables']['connection']['Row']
 
 export default function Index({ connections }: { connections: Connection[] }) {
     const { isOpen, showDialog, setIsOpen } = useDialog({});
-    const onEdit = (item: unknown) => {
-        console.log(`Deleting ${item}`)
-    }
-
-    const onDelete = (id: string) => {
-        console.log(`Deleting ${id}`)
-    }
 
     return (
         <Layout>
@@ -39,7 +32,6 @@ export default function Index({ connections }: { connections: Connection[] }) {
 
             <ConnectionsTable
                 connections={connections}
-                actions={{ onEdit, onDelete }}
             />
 
             <CreateUpdateConnectionDialog

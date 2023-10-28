@@ -8,10 +8,8 @@ export interface MailOptions {
     from: string
     to: string
     subject: string
-    fullname: string
+    message: string
 }
-
-console.log(process.env.RESEND_API_KEY)
 
 interface NextApiRequestBody extends NextApiRequest {
     body: MailOptions
@@ -23,16 +21,15 @@ export interface ResponseBody {
 }
 
 async function GET(req: NextApiRequestBody, res: NextApiResponse<ResponseBody>) {
-    const { from, fullname: name, subject, to } = req.body
-    res.status(200).json({ data: { success: true } })
+    const { subject, to, message } = req.body
 
     try {
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev',
-            to: 'victorofoegbu0009@gmail.com',
+            to,
             text: '',
             subject,
-            react: EmailTemplate({ name }),
+            react: EmailTemplate({ message }),
         });
 
         console.log(`Mail sent`)
