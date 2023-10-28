@@ -29,7 +29,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
             <footer className="p-7 ">
                 <p className="text-center">
-                    This is just a dummy footer
+                    Footer
                 </p>
             </footer>
         </div>

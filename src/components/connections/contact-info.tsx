@@ -2,7 +2,7 @@ import { Connection } from "lib/types"
 import { Linkedin, Twitter } from "lucide-react"
 import { Button } from "../ui"
 import { useDialog } from "../ui/hooks/use-dialog"
-import ReachoutModal from "../ui/modals/reachout-modal"
+import ReachOutModal from "../ui/modals/reachout-modal"
 
 const contactInfo = [
     { type: 'linkedin', value: 'https://linkedIn.com/in/victor-ofoegbu', icon: <Linkedin className='h-4 w-4' /> },
@@ -62,7 +62,7 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                     </ul>
                 </div>
 
-                <ReachoutModal
+                <ReachOutModal
                     open={isOpen}
                     onOpenChange={setIsOpen}
                     connection={connection}

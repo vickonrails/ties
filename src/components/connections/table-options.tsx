@@ -11,9 +11,7 @@ interface ConnectionTableActionsProps<T> {
 }
 
 const ConnectionTableActions = ({ trigger, actions = {}, connection }: ConnectionTableActionsProps<Connection>) => {
-    const { onDeleteClick, onEditClick } = actions
-    const openHistoryModal = () => { }
-    const openReachoutModal = () => { }
+    const { onDeleteClick, onEditClick, onReachOutClick, onHistoryClick } = actions
 
     return (
         <Menubar onClick={e => e.stopPropagation()}>
@@ -34,16 +32,14 @@ const ConnectionTableActions = ({ trigger, actions = {}, connection }: Connectio
                     <MenubarItem
                         className="text-gray-600"
                         icon={<History className="w-4 h-4" />}
-                        disabled
-                        onClick={openHistoryModal}
+                        onClick={_ => onHistoryClick?.(connection)}
                     >
                         Show History
                     </MenubarItem>
                     <MenubarItem
                         className="text-gray-600"
                         icon={<HeartHandshake className="w-4 h-4" />}
-                        disabled
-                        onClick={openReachoutModal}
+                        onClick={() => onReachOutClick?.(connection)}
                     >
                         Reachout
                     </MenubarItem>

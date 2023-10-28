@@ -38,6 +38,8 @@ export interface TableActions<T> {
     onDeleteClick?: (item: T) => void
     onEdit?: (id: string) => void
     onEditClick?: (item: T) => void
+    onReachOutClick?: (item: T) => void
+    onHistoryClick?: (item: T) => void
 }
 
 interface ConnectionsTableProps<T> {

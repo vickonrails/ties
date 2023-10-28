@@ -6,12 +6,17 @@ import { useRouter } from "next/router"
 import CreateUpdateConnectionDialog from "../create-connection"
 import { useDialog } from "../hooks/use-dialog"
 import ConnectionDeleteModal from "../modals/delete-modal"
+import ReachOutModal from "../modals/reachout-modal"
 import { TableActions } from "./table"
+import ConnectionHistoryModal from "../modals/connection-history-modal"
 
 const TableBody = <T extends Connection>({ table, actions, loading }: { table: Table<T>, actions: TableActions<T>, loading?: boolean }) => {
     const { onDelete } = actions
     const { isOpen, showDialog, setIsOpen } = useDialog<Connection>({});
     const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog<Connection>({});
+    const { isOpen: reachOutOpen, showDialog: showReachOutDialog, setIsOpen: setReachOutDialogOpen, entity: reachOutConnection } = useDialog<Connection>({});
+    const { isOpen: historyDialogOpen, showDialog: showHistoryDialog, setIsOpen: setHistoryDialogOpen, entity: historyDialogEntity } = useDialog<Connection>({});
+
     const router = useRouter()
     const navigateToConnection = (id: string) => {
         router.push(`/connection/${id}`);
@@ -40,7 +45,7 @@ const TableBody = <T extends Connection>({ table, actions, loading }: { table: T
                         <td className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
                             <ConnectionTableActions
                                 connection={row.original}
-                                actions={{ onDelete, onDeleteClick: showDialog, onEditClick: showEditDialog }}
+                                actions={{ onDelete, onDeleteClick: showDialog, onEditClick: showEditDialog, onReachOutClick: showReachOutDialog, onHistoryClick: showHistoryDialog }}
                                 trigger={
                                     <MoreVertical className='h-4 w-4' />
                                 }
@@ -59,6 +64,18 @@ const TableBody = <T extends Connection>({ table, actions, loading }: { table: T
             <ConnectionDeleteModal
                 open={isOpen}
                 onOpenChange={setIsOpen}
+            />
+
+            <ReachOutModal
+                open={reachOutOpen}
+                onOpenChange={setReachOutDialogOpen}
+                connection={reachOutConnection!}
+            />
+
+            <ConnectionHistoryModal
+                open={historyDialogOpen}
+                onOpenChange={setHistoryDialogOpen}
+                connection={historyDialogEntity!}
             />
         </>
 
