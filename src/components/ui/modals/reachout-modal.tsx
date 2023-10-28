@@ -1,5 +1,5 @@
 import { DialogProps } from "@radix-ui/react-dialog"
-import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { Database } from "lib/database.types"
 import { Connection, ReachOutInsert } from "lib/types"
 import { useEffect, useState } from "react"
@@ -8,15 +8,26 @@ import { Button } from ".."
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../dialog"
 import { Select } from "../select"
 import { Textarea } from "../textarea"
+import { MailOptions } from "@/pages/api/send"
 
 const options = [
     { label: 'Schedule a Meeting', value: '0' },
     { label: 'Share an Update', value: '1' },
 ]
 
-const ReachoutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps & { connection: Connection }) => {
+async function sendMail(options: MailOptions) {
+    return await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(options),
+    })
+}
+
+const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps & { connection: Connection }) => {
+    const session = useSession()
     const client = useSupabaseClient<Database>()
-    const { email_address, id: connection_id } = connection
     const { handleSubmit, control, register, formState: { isSubmitting }, reset } = useForm<ReachOutInsert>();
     const [formError, setFormError] = useState('')
 
@@ -27,11 +38,16 @@ const ReachoutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
         }
     }, [open, reset])
 
+    if (!session) return;
+
     const onSubmit = async (data: ReachOutInsert) => {
+        const { email_address, id: connection_id, fullname } = connection
         try {
+            // TODO: error handling
+            await sendMail({ from: session.user.email!, fullname, subject: 'Hello there', to: email_address })
             const { error } = await client.from('reach_outs').insert({ ...data, email_address, connection_id })
             if (error) throw error;
-            // onSubmitSuccessful();
+            onOpenChange?.(false);
         } catch {
             setFormError("Couldn't submit form")
             // TODO: handle error
@@ -42,7 +58,7 @@ const ReachoutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
         <Dialog open={open} onOpenChange={onOpenChange} {...rest}>
             <DialogContent>
                 <DialogHeader className="mb-3">
-                    <DialogTitle>Reach out to {connection.fullname}</DialogTitle>
+                    <DialogTitle>Reach out to {connection?.fullname}</DialogTitle>
                     <DialogDescription>
                         Are you sure you want to delete this connection
                     </DialogDescription>
@@ -78,4 +94,4 @@ const ReachoutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
     )
 }
 
-export default ReachoutModal
+export default ReachOutModal
