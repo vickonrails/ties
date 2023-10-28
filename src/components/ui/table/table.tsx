@@ -4,6 +4,7 @@ import { Connection } from 'lib/types';
 import TableBody from './table-body';
 import { ConnectionLevelColumn, LocationColumn, TextColumn } from './table-columns';
 import { TableHeader } from './table-header';
+import { formatDate } from '@/lib/format-date';
 
 const columns: ColumnDef<Connection, JSX.Element>[] = [
     {
@@ -29,7 +30,7 @@ const columns: ColumnDef<Connection, JSX.Element>[] = [
     {
         accessorKey: 'created_at',
         header: 'Added',
-        cell: ({ getValue }) => <p>{getValue() ?? '-'}</p>
+        cell: ({ getValue }) => <p>{formatDate(getValue<string>()) ?? '-'}</p>
     }
 ]
 
@@ -42,14 +43,13 @@ export interface TableActions<T> {
     onHistoryClick?: (item: T) => void
 }
 
-interface ConnectionsTableProps<T> {
+interface ConnectionsTableProps {
     connections: Connection[],
-    actions: TableActions<T>
     loading?: boolean
 }
 
 // Empty state for table
-const ConnectionsTable = ({ connections: data, actions, loading }: ConnectionsTableProps<Connection>) => {
+const ConnectionsTable = ({ connections: data, loading }: ConnectionsTableProps) => {
     const table = useReactTable<Connection>({
         data,
         columns,
@@ -65,7 +65,6 @@ const ConnectionsTable = ({ connections: data, actions, loading }: ConnectionsTa
                 <TableBody<Connection>
                     table={table}
                     loading={loading}
-                    actions={actions}
                 />
             </table>
         </>

@@ -7,5 +7,5 @@ export function useRefreshData() {
         replace(asPath);
     }
 
-    return [refreshData]
+    return refreshData
 }

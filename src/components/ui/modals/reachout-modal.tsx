@@ -82,8 +82,17 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
                         )}
                     />
 
-                    <Input label="Message subject" {...register('subject', { required: 'A message subject is required' })} />
-                    <Textarea label="Reach out message" {...register('message', { required: 'Message body is required' })} />
+                    <Input
+                        label="Message subject"
+                        hint={errors.subject?.message}
+                        {...register('subject', { required: 'A message subject is required' })}
+                    />
+
+                    <Textarea
+                        label="Reach out message"
+                        hint={errors.message?.message}
+                        {...register('message', { required: 'Message body is required' })}
+                    />
 
                     {formError && (<p>{formError}</p>)}
 

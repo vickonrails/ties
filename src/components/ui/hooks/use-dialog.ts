@@ -1,8 +1,11 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { SupabaseClient } from '@supabase/supabase-js'
+import { Database } from 'lib/database.types'
 import { useCallback, useState } from 'react'
 
 interface DialogHookProps {
-    onOk?: (id: string) => Promise<void>
-    refresh?: () => Promise<void>
+    onOk?: (client: SupabaseClient<Database>, id: string) => Promise<null>
+    refresh?: () => Promise<void> | void
 }
 
 interface BaseEntity {
@@ -13,6 +16,7 @@ export function useDialog<T extends BaseEntity>(initialProps: DialogHookProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [entity, setEntity] = useState<T | null>(null)
     const [loading, setLoading] = useState(false)
+    const client = useSupabaseClient<Database>()
 
     const { onOk } = initialProps
 
@@ -20,17 +24,16 @@ export function useDialog<T extends BaseEntity>(initialProps: DialogHookProps) {
         if (!entity) return
 
         setLoading(true)
-        onOk?.(entity?.id).then(async () => {
+        onOk?.(client, entity?.id).then(async () => {
             await initialProps.refresh?.()
-
             setIsOpen(false)
         }).catch(err => {
-
+            // TODO: handle error
         }).finally(() => {
             setLoading(false)
         })
 
-    }, [initialProps, onOk, entity])
+    }, [client, entity, onOk, initialProps])
 
     const showDialog = (item?: T) => {
         setEntity(item ?? null)

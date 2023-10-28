@@ -4,29 +4,21 @@ import { Spinner } from "../spinner"
 import { DetailsAccordion } from "../ui/details-accordion"
 import { SharedInterests } from "./shared-interests"
 
-const interests = [
-    'Swimming',
-    'Reading'
-]
-
-const sharedInterests = [
-    'Swimming',
-    'Reading'
-]
-
 export function DetailsContext({ connection, reachOuts }: { connection: Connection, reachOuts: ReachOut[] }) {
+    const { common_interests, interests } = connection
     return (
         <main className='flex-1 flex flex-col gap-4'>
             <div className='p-6 border rounded'>
                 <div className='mb-4'>
                     <DetailsAccordion connection={connection} />
                 </div>
-                <SharedInterests
-                    sharedInterests={sharedInterests}
-                    interests={interests}
-                />
+                {(common_interests && interests) && (
+                    <SharedInterests
+                        sharedInterests={common_interests?.split(',')}
+                        interests={interests?.split(',')}
+                    />
+                )}
             </div>
-
             <ReachOutHistory
                 connection={connection}
                 reachOuts={reachOuts}
@@ -69,7 +61,7 @@ function ReachOutHistoryItem({ reachOut, connection }: { reachOut: ReachOut, con
                 </h4>
                 <time className="text-xs">{formatDate(created_at!)}</time>
             </div>
-            <p className="text-muted-foreground text-sm">{message}</p>
+            <p className="text-muted-foreground text-sm">{`${message.slice(0, 150)}...`}</p>
         </div>
     )
 }

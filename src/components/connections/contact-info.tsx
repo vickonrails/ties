@@ -11,7 +11,7 @@ const contactInfo = [
 
 export function ContactInfo({ connection }: { connection: Connection }) {
     const { isOpen, showDialog, setIsOpen } = useDialog({})
-    const { country } = connection
+    const { country, company } = connection
     return (
         <aside className="w-1/4 flex flex-col gap-4">
             <section className="p-6 py-3 border rounded flex flex-col gap-3">
@@ -23,24 +23,27 @@ export function ContactInfo({ connection }: { connection: Connection }) {
             </section>
 
             <section className='border rounded flex flex-col gap-3 p-6'>
-                <div className='border-b pb-2'>
-                    <p className='font-medium'>
-                        Lives In
-                    </p>
-                    <div className='text-sm flex items-center gap-2'>
-                        <p className='text-2xl'>🇳🇬</p>
-                        {country}
+                {country && (
+                    <div className='border-b pb-2'>
+                        <p className='font-medium'>
+                            Lives In
+                        </p>
+                        <div className='text-sm flex items-center gap-2'>
+                            {country}
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <div className='border-b pb-2'>
-                    <p className='font-medium mb-2'>
-                        Company
-                    </p>
-                    <div className='text-sm flex items-center gap-2'>
-                        <p>Facebook</p>
+                {company && (
+                    <div className='border-b pb-2'>
+                        <p className='font-medium mb-2'>
+                            Company
+                        </p>
+                        <div className='text-sm flex items-center gap-2'>
+                            {company}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* TODO: use the actual social network icons */}
                 <div>

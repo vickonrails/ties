@@ -6,6 +6,7 @@ import { useDialog } from '@/components/ui/hooks/use-dialog'
 import { Layout } from '@/components/ui/layout'
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar'
 import ConnectionDeleteModal from '@/components/ui/modals/delete-modal'
+import { DeleteConnection } from '@/components/ui/table/table-body'
 import { ConnectionLevelColumn } from '@/components/ui/table/table-columns'
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from 'lib/database.types'
@@ -20,8 +21,9 @@ function ConnectionDetails({ connection, reachOuts }: { connection: Connection, 
         isOpen: updateOpen,
         showDialog: showUpdateDialog,
         setIsOpen: setUpdateOpen,
-        entity: updateEntity
-    } = useDialog<Connection>({});
+        entity: updateEntity,
+        onOkFn
+    } = useDialog<Connection>({ onOk: DeleteConnection });
 
     const {
         isOpen: deleteOpen,
@@ -33,7 +35,7 @@ function ConnectionDetails({ connection, reachOuts }: { connection: Connection, 
         <Layout>
             <BackButton />
             <div className='mb-10'>
-                <div className='bg-gray-100 w-full h-72 flex justify-end items-start p-4'>
+                <div className='bg-gray-100 w-full h-72 flex justify-end items-start p-4 hero_pattern'>
                     <section className='flex items-center'>
                         <ConnectionLevelColumn size='md' level={connection?.friendship_level ?? 0} />
                         <Menu onEditClick={showUpdateDialog} onDeleteClick={showDeleteDialog} connection={connection!} />
@@ -53,8 +55,10 @@ function ConnectionDetails({ connection, reachOuts }: { connection: Connection, 
             />
 
             <ConnectionDeleteModal
+                onOk={onOkFn}
                 open={deleteOpen}
                 onOpenChange={setDeleteOpen}
+                connection={connection}
             />
         </Layout>
     )
