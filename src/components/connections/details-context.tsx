@@ -3,6 +3,7 @@ import { Connection, ReachOut } from "lib/types"
 import { Spinner } from "../spinner"
 import { DetailsAccordion } from "../ui/details-accordion"
 import { SharedInterests } from "./shared-interests"
+import { useMemo } from "react"
 
 export function DetailsContext({ connection, reachOuts }: { connection: Connection, reachOuts: ReachOut[] }) {
     const { common_interests, interests } = connection
@@ -28,22 +29,30 @@ export function DetailsContext({ connection, reachOuts }: { connection: Connecti
 }
 
 export function ReachOutHistory({ reachOuts, loading = false, connection }: { reachOuts?: ReachOut[], connection: Connection, loading?: boolean }) {
-    const { created_at } = connection
+    const isEmpty = useMemo(() => reachOuts?.length === 0, [reachOuts])
     return (
         <div className='px-4 border rounded overflow-y-auto max-h-72 min-h-[100px]'>
             {loading ? (
                 <Spinner className="mt-6" />
             ) : (
-                <article>
-                    {reachOuts?.map(reachOut => (
-                        <ReachOutHistoryItem
-                            key={reachOut.id}
-                            reachOut={reachOut}
-                            connection={connection}
-                        />
-                    ))}
-                    <p className="py-2 text-sm">You added {connection.fullname} on {formatDate(created_at!)}</p>
-                </article>
+                <>
+                    {isEmpty ? (
+                        <div className="mt-4 text-center">
+                            <h3 className="font-medium">Ooops</h3>
+                            <p className="text-muted-foreground text-sm max-w-xs mx-auto">Haven't reached out to {connection?.fullname} yet. History will show when you reach out.</p>
+                        </div>
+                    ) : (
+                        <article>
+                            {reachOuts?.map(reachOut => (
+                                <ReachOutHistoryItem
+                                    key={reachOut.id}
+                                    reachOut={reachOut}
+                                    connection={connection}
+                                />
+                            ))}
+                        </article>
+                    )}
+                </>
             )}
         </div >
     )

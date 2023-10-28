@@ -25,6 +25,7 @@ export interface Database {
                     fullname: string
                     id: string
                     interests: string | null
+                    linkedin_url: string | null
                     occupation: string | null
                     origin_context: string | null
                     reach_out_frequency: string | null
@@ -33,6 +34,7 @@ export interface Database {
                     updated_at: string | null
                     value_to_me: string | null
                     value_to_them: string | null
+                    x_url: string | null
                 }
                 Insert: {
                     bio?: string | null
@@ -49,6 +51,7 @@ export interface Database {
                     fullname: string
                     id?: string
                     interests?: string | null
+                    linkedin_url?: string | null
                     occupation?: string | null
                     origin_context?: string | null
                     reach_out_frequency?: string | null
@@ -57,6 +60,7 @@ export interface Database {
                     updated_at?: string | null
                     value_to_me?: string | null
                     value_to_them?: string | null
+                    x_url?: string | null
                 }
                 Update: {
                     bio?: string | null
@@ -73,6 +77,7 @@ export interface Database {
                     fullname?: string
                     id?: string
                     interests?: string | null
+                    linkedin_url?: string | null
                     occupation?: string | null
                     origin_context?: string | null
                     reach_out_frequency?: string | null
@@ -81,6 +86,7 @@ export interface Database {
                     updated_at?: string | null
                     value_to_me?: string | null
                     value_to_them?: string | null
+                    x_url?: string | null
                 }
                 Relationships: []
             }

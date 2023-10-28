@@ -35,10 +35,10 @@ const ConnectionHistoryModal = ({ open, onOpenChange, connection, ...rest }: Dia
     return (
         <Dialog open={open} onOpenChange={onOpenChange} {...rest}>
             <DialogContent>
-                <DialogHeader className="mb-3">
-                    <DialogTitle>Connection history for {connection?.fullname}</DialogTitle>
+                <DialogHeader className="mb-3 max-w-xs">
+                    <DialogTitle>Connection history</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete this connection
+                        Shows the number of times you've reached out to <span className="font-medium text-primary">{connection?.fullname}</span>
                     </DialogDescription>
                 </DialogHeader>
                 <ReachOutHistory

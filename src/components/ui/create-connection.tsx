@@ -52,6 +52,7 @@ const friendship_level_options = [
     { label: 'Intimate Friends', value: '3' }
 ]
 
+// TODO: improve the layout system for the form
 const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: CreateConnectionFormProps) => {
     const formRef = useRef<HTMLFormElement>(null)
     const client = useSupabaseClient<Database>()
@@ -188,21 +189,37 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                         />
                     </div>
 
-                    <Controller
-                        name='contact_frequency'
-                        control={control}
-                        defaultValue={'1'}
-                        render={({ field: { onChange, value } }) => (
-                            <Select
-                                containerClasses='w-1/2'
-                                label='Reach out Frequency'
-                                className='max-w-xs'
-                                onValueChange={val => onChange(parseInt(val))}
-                                options={reachoutFreqOptions}
-                                value={String(value) ?? ''}
-                                hint={errors.contact_frequency?.message}
-                            />
-                        )}
+                    <div className='flex w-full mb-4 gap-3'>
+                        <Controller
+                            name='contact_frequency'
+                            control={control}
+                            defaultValue={'1'}
+                            render={({ field: { onChange, value } }) => (
+                                <Select
+                                    containerClasses='w-1/2'
+                                    label='Reach out Frequency'
+                                    className='max-w-xs'
+                                    onValueChange={val => onChange(parseInt(val))}
+                                    options={reachoutFreqOptions}
+                                    value={String(value) ?? ''}
+                                    hint={errors.contact_frequency?.message}
+                                />
+                            )}
+                        />
+
+                        <Input
+                            label='LinkedIn URL'
+                            containerProps={{ className: 'flex-1' }}
+                            hint={errors.linkedin_url?.message}
+                            {...register('linkedin_url')}
+                        />
+
+                    </div>
+                    <Input
+                        label='X (FKA Twitter) URL'
+                        containerProps={{ className: 'flex-1' }}
+                        hint={errors.x_url?.message}
+                        {...register('x_url')}
                     />
                 </TabsContent>
             </Tabs>
