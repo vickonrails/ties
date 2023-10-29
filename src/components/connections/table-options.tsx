@@ -23,21 +23,21 @@ const ConnectionTableActions = ({ trigger, actions = {}, connection }: Connectio
                 </MenubarTrigger>
                 <MenubarContent align="end">
                     <MenubarItem
-                        className="text-gray-600"
+                        className="text-muted-foreground"
                         icon={<PencilLine className="w-4 h-4" />}
-                        onClick={_ => onEditClick?.(connection)}
+                        onClick={() => onEditClick?.(connection)}
                     >
                         Edit
                     </MenubarItem>
                     <MenubarItem
-                        className="text-gray-600"
+                        className="text-muted-foreground"
                         icon={<History className="w-4 h-4" />}
-                        onClick={_ => onHistoryClick?.(connection)}
+                        onClick={() => onHistoryClick?.(connection)}
                     >
                         Show History
                     </MenubarItem>
                     <MenubarItem
-                        className="text-gray-600"
+                        className="text-muted-foreground"
                         icon={<HeartHandshake className="w-4 h-4" />}
                         onClick={() => onReachOutClick?.(connection)}
                     >
@@ -45,9 +45,9 @@ const ConnectionTableActions = ({ trigger, actions = {}, connection }: Connectio
                     </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem
-                        className="bg-red-50 text-red-400"
+                        className="bg-red-50 text-red-400 focus:bg-red-100 focus:text-red-400"
                         icon={<Trash className="w-4 h-4" />}
-                        onClick={_ => onDeleteClick?.(connection)}
+                        onClick={() => onDeleteClick?.(connection)}
                     >
                         Delete
                     </MenubarItem>

@@ -12,13 +12,13 @@ import ConnectionHistoryModal from "../modals/connection-history-modal"
 import ConnectionDeleteModal from "../modals/delete-modal"
 import ReachOutModal from "../modals/reachout-modal"
 
-export async function DeleteConnection(client: SupabaseClient<Database>, id: string) {
+export async function deleteConnection(client: SupabaseClient<Database>, id: string) {
     return (await client.from('connection').delete().eq('id', id)).data;
 }
 
 const TableBody = <T extends Connection>({ table, loading }: { table: Table<T>, loading?: boolean }) => {
     const refresh = useRefreshData()
-    const { isOpen, loading: isDeleting, showDialog, setIsOpen, entity: connectionToDelete, onOkFn: onDelete } = useDialog<Connection>({ onOk: DeleteConnection, refresh });
+    const { isOpen, loading: isDeleting, showDialog, setIsOpen, entity: connectionToDelete, onOkFn: onDelete } = useDialog<Connection>({ onOk: deleteConnection, refresh });
     const { isOpen: isEditDialogOpen, showDialog: showEditDialog, setIsOpen: setEditDialogOpen, entity } = useDialog<Connection>({});
     const { isOpen: reachOutOpen, showDialog: showReachOutDialog, setIsOpen: setReachOutDialogOpen, entity: reachOutConnection } = useDialog<Connection>({});
     const { isOpen: historyDialogOpen, showDialog: showHistoryDialog, setIsOpen: setHistoryDialogOpen, entity: historyDialogEntity } = useDialog<Connection>({});
@@ -38,7 +38,7 @@ const TableBody = <T extends Connection>({ table, loading }: { table: Table<T>, 
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        onClick={_ => navigateToConnection(row.original.id)}
+                        onClick={() => navigateToConnection(row.original.id)}
                         className='hover:bg-gray-100 hover:cursor-pointer transition-colors border border-t-0 border-gray-100'
                     >
                         {row.getVisibleCells().map(cell => (

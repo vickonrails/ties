@@ -4,13 +4,13 @@ export function SharedInterests({ interests = [], sharedInterests = [] }: { inte
             <section className='flex-1 border-r px-3'>
                 <h3 className='uppercase text-sm mb-2 font-medium'>Interests</h3>
                 <ul className='ml-4'>
-                    {interests.map(interest => <li key={interest} className='list-disc text-sm'>{interest}</li>)}
+                    {interests.map(interest => <li key={interest} className='list-disc text-sm text-muted-foreground'>{interest}</li>)}
                 </ul>
             </section>
             <section className='flex-1 px-3'>
                 <h3 className='uppercase text-sm mb-2 font-medium'>Common Interests</h3>
                 <ul className='ml-4'>
-                    {sharedInterests.map(interest => <li key={interest} className='list-disc text-sm'>{interest}</li>)}
+                    {sharedInterests.map(interest => <li key={interest} className='list-disc text-sm text-muted-foreground'>{interest}</li>)}
                 </ul>
             </section>
         </section>

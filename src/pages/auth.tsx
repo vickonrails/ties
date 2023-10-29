@@ -60,6 +60,7 @@ export default function Auth() {
                     >
                         <Input
                             placeholder='Enter email address'
+                            hint={errors.email?.message}
                             {...register('email', {
                                 required: 'Email address is required',
                                 pattern: {
@@ -68,16 +69,13 @@ export default function Auth() {
                                 }
                             })}
                         />
-                        {errors.email && (
-                            <p className='text-sm'>{errors.email?.message}</p>
-                        )}
 
                         {isSubmitSuccessful && (
-                            <p>
+                            <p className='text-sm border border-green-200 p-3 rounded bg-green-50 text-green-800 select-none'>
                                 A login link has been sent to your email
                             </p>
                         )}
-                        <Button disabled={isSubmitSuccessful} type='submit'>{isSubmitting ? 'Submitting' : 'Send Magic Link'}</Button>
+                        <Button disabled={isSubmitSuccessful} loading={isSubmitting} type='submit'>Send Magic Link</Button>
                     </form>
                 </section>
             </section>
@@ -87,9 +85,10 @@ export default function Auth() {
     )
 }
 
+// TODO: Other OAuth Sign in 
 function GoogleButton() {
     return (
-        <Button variant='outline' className='flex-1'>
+        <Button variant='outline' className='flex-1' disabled>
             Google
         </Button>
     )
@@ -97,7 +96,7 @@ function GoogleButton() {
 
 function GithubButton() {
     return (
-        <Button variant='outline' className='flex-1'>
+        <Button variant='outline' className='flex-1' disabled>
             {/* <Github /> */}
             GitHub
         </Button>

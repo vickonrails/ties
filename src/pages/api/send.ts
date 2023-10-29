@@ -2,7 +2,7 @@ import { EmailTemplate } from '@/components/email/template';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export interface MailOptions {
     from: string
@@ -38,6 +38,6 @@ async function GET(req: NextApiRequestBody, res: NextApiResponse<ResponseBody>) 
     } catch (error) {
         res.status(400).json({ error });
     }
-};
+}
 
 export default GET

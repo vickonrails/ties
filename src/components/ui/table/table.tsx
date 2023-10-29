@@ -20,7 +20,7 @@ const columns: ColumnDef<Connection, JSX.Element>[] = [
     {
         accessorKey: 'timezone',
         header: 'Timezone',
-        cell: ({ getValue }) => <p>{getValue<string>()?.toUpperCase()}</p>
+        cell: ({ getValue }) => <p>{getValue<string>()?.toUpperCase() ?? '-'}</p>
     },
     {
         accessorKey: 'friendship_level',

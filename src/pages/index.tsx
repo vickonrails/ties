@@ -5,7 +5,6 @@ import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table/table";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "lib/database.types";
-import { MoreVertical } from "lucide-react";
 import { GetServerSideProps } from "next";
 
 export type Connection = Database['public']['Tables']['connection']['Row']
@@ -20,13 +19,10 @@ export default function Index({ connections }: { connections: Connection[] }) {
                 <div className="flex justify-center items-center">
                     <Button
                         variant='outline'
-                        onClick={_ => showDialog()}
+                        onClick={() => showDialog()}
                     >
                         Add Connection
                     </Button>
-                    <button>
-                        <MoreVertical />
-                    </button>
                 </div>
             </div>
 
@@ -56,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             }
         }
     }
-
 
     const { data: connections } = await supabase.from('connection').select()
 

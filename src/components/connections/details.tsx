@@ -16,7 +16,7 @@ export function MetaDetails({ connection }: { connection: Connection }) {
                 {occupation && <p className='text-sm'>{occupation}</p>}
             </div>
 
-            {bio && <p className='mb-4'>{bio}</p>}
+            {bio && <p className='mb-4 text-muted-foreground'>{bio}</p>}
 
             {tags && (
                 <>

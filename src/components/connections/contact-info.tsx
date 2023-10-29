@@ -23,7 +23,7 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                         <p className='font-medium'>
                             Lives In
                         </p>
-                        <div className='text-sm flex items-center gap-2'>
+                        <div className='text-sm flex items-center gap-2 text-muted-foreground'>
                             {country}
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export function ContactInfo({ connection }: { connection: Connection }) {
                         <p className='font-medium mb-2'>
                             Company
                         </p>
-                        <div className='text-sm flex items-center gap-2'>
+                        <div className='text-sm flex items-center gap-2 text-muted-foreground'>
                             {company}
                         </div>
                     </div>

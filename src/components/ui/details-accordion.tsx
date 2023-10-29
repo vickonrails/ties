@@ -15,7 +15,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                     </div>
                 </AccordionTrigger>
 
-                <AccordionContent>
+                <AccordionContent className="text-muted-foreground">
                     {connection.origin_context ?? '-'}
                 </AccordionContent>
             </AccordionItem>
@@ -27,7 +27,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                         <span>What value can you give them?</span>
                     </div>
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent className="text-muted-foreground">
                     {connection.value_to_them ?? '-'}
                 </AccordionContent>
             </AccordionItem>
@@ -39,7 +39,7 @@ export function DetailsAccordion({ connection }: { connection: Connection }) {
                         <span>What value can they give you?</span>
                     </div>
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent className="text-muted-foreground">
                     {connection.value_to_me ?? '-'}
                 </AccordionContent>
             </AccordionItem>

@@ -1,3 +1,4 @@
+import { MailOptions } from "@/pages/api/send"
 import { DialogProps } from "@radix-ui/react-dialog"
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { Database } from "lib/database.types"
@@ -8,7 +9,6 @@ import { Button, Input } from ".."
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../dialog"
 import { Select } from "../select"
 import { Textarea } from "../textarea"
-import { MailOptions } from "@/pages/api/send"
 
 const options = [
     { label: 'Schedule a Meeting', value: '0' },
@@ -48,6 +48,9 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
             const { error } = await client.from('reach_outs').insert({ ...data, email_address, connection_id })
             if (error) throw error;
             onOpenChange?.(false);
+            // use a temporary hard reset ): because there's no clean way to refresh the reachout history on the other side of the page
+            // TODO: remove hard reset when I add React Query for cache management.
+            window.location.reload();
         } catch {
             setFormError("Couldn't submit form")
             // TODO: handle error
@@ -97,7 +100,7 @@ const ReachOutModal = ({ open, onOpenChange, connection, ...rest }: DialogProps 
                     {formError && (<p>{formError}</p>)}
 
                     <DialogFooter>
-                        <Button variant='outline' onClick={_ => onOpenChange?.(false)}>Cancel</Button>
+                        <Button variant='outline' onClick={() => onOpenChange?.(false)}>Cancel</Button>
                         <Button loading={isSubmitting}>Reach out</Button>
                     </DialogFooter>
                 </form>
