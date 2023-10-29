@@ -24,6 +24,7 @@ async function GET(req: NextApiRequestBody, res: NextApiResponse<ResponseBody>) 
     const { subject, to, message } = req.body
 
     try {
+        // TODO: waiting for resend domains to be configured, replace with domain once configured
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev',
             to,
@@ -32,7 +33,7 @@ async function GET(req: NextApiRequestBody, res: NextApiResponse<ResponseBody>) 
             react: EmailTemplate({ message }),
         });
 
-        console.log(`Mail sent`)
+        // console.log(`Mail sent`)
 
         res.status(200).json({ data });
     } catch (error) {

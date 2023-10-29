@@ -228,7 +228,7 @@ const CreateConnectionForm = ({ onSubmitSuccessful, defaultValues, ...rest }: Cr
                 {/* <div>
                     {!isSubmitSuccessful && (<p className='text-destructive text-sm'>Fields marked with * are required</p>)}
                 </div> */}
-                <Button loading={isSubmitting}>
+                <Button loading={isSubmitting} type='submit'>
                     {defaultValues ? 'Update Connection' : 'Create Connection'}
                 </Button>
             </DialogFooter>

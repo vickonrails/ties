@@ -5,12 +5,11 @@ import { Layout } from "@/components/ui/layout";
 import ConnectionsTable from "@/components/ui/table/table";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "lib/database.types";
+import { Connection } from "lib/types";
 import { GetServerSideProps } from "next";
 
-export type Connection = Database['public']['Tables']['connection']['Row']
-
 export default function Index({ connections }: { connections: Connection[] }) {
-    const { isOpen, showDialog, setIsOpen } = useDialog({});
+    const { isOpen, showDialog: showUpdateDialog, setIsOpen } = useDialog({});
 
     return (
         <Layout>
@@ -19,7 +18,7 @@ export default function Index({ connections }: { connections: Connection[] }) {
                 <div className="flex justify-center items-center">
                     <Button
                         variant='outline'
-                        onClick={() => showDialog()}
+                        onClick={() => showUpdateDialog()}
                     >
                         Add Connection
                     </Button>

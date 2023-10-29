@@ -36,7 +36,7 @@ async function fetchReachOutHistory(client: SupabaseClient<Database>, connection
 
         return data
     } catch (err) {
-        // 
+        // TODO: handle error
     }
 }
 

@@ -5,6 +5,8 @@ import TableBody from './table-body';
 import { ConnectionLevelColumn, LocationColumn, TextColumn } from './table-columns';
 import { TableHeader } from './table-header';
 import { formatDate } from '@/lib/format-date';
+import Image from 'next/image';
+import emptySrc from '@/assets/empty.svg'
 
 const columns: ColumnDef<Connection, JSX.Element>[] = [
     {
@@ -56,6 +58,8 @@ const ConnectionsTable = ({ connections: data, loading }: ConnectionsTableProps)
         getCoreRowModel: getCoreRowModel()
     })
 
+    const isEmpty = data.length === 0
+
     return (
         <>
             <table className='w-full'>
@@ -67,6 +71,13 @@ const ConnectionsTable = ({ connections: data, loading }: ConnectionsTableProps)
                     loading={loading}
                 />
             </table>
+
+            {isEmpty && (
+                <div className='text-center flex flex-col gap-6 items-center mt-16'>
+                    <Image src={emptySrc} width={400} height={400} alt='' />
+                    <p className='text-muted-foreground'>You've got no connections. Try creating some.</p>
+                </div>
+            )}
         </>
     )
 }

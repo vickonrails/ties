@@ -6,7 +6,7 @@ import { ConnectionAvatar } from "../avatar";
 export function TextColumn({ getValue }: CellContext<Connection, string>) {
     const value = getValue();
     return (
-        <div className='font-medium text-gray-900 flex items-center gap-2'>
+        <div className='font-medium text-muted-foreground flex items-center gap-2'>
             <ConnectionAvatar fullname={value} size='xs' />
             <p>{value ?? '-'}</p>
         </div>
@@ -37,6 +37,7 @@ export function ConnectionLevelColumn({ level, size = 'sm' }: { level: number, s
     const baseClasses = cn('text-xs border bg-white select-none  rounded-md inline-flex items-center gap-2', SIZE_LOOKUP[size])
     switch (level) {
         case 0:
+        default:
             return (
                 <div className={cn(baseClasses)}>
                     <Dot className='bg-purple-400' />
@@ -67,11 +68,4 @@ export function ConnectionLevelColumn({ level, size = 'sm' }: { level: number, s
                 </div>
             )
     }
-
-    return (
-        <div className={cn(baseClasses)}>
-            <Dot className='bg-purple-400' />
-            <p className='uppercase'>Acquaintance</p>
-        </div>
-    )
 }

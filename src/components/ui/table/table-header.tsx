@@ -6,12 +6,12 @@ import { ReactNode } from "react"
 export const TableHeader = <T extends Connection>({ table }: { table: Table<T> }) => {
     return (
         <thead>
-            <tr className='bg-blue-100'>
+            <tr className='bg-slate-100'>
                 {table.getHeaderGroups().map(headerGroups => (
                     <>
                         {headerGroups.headers.map(header => (
-                            <th className='font-normal text-left text-sm p-3 px-4 text-gray-600' key={header.id}>
-                                <div className='flex items-center gap-2 select-none'>
+                            <th className='font-normal text-left text-sm p-3' key={header.id}>
+                                <div className='flex font-medium items-center gap-2 select-none'>
                                     {header.column.columnDef.header as ReactNode}
                                     <ArrowUpDown className='h-4 w-4' />
                                 </div>
@@ -19,7 +19,7 @@ export const TableHeader = <T extends Connection>({ table }: { table: Table<T> }
                         ))}
                     </>
                 ))}
-                <th className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
+                <th className='text-left font-medium text-sm p-3'>
                     Actions
                 </th>
             </tr>

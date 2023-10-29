@@ -1,5 +1,6 @@
 import { ConnectionInsert } from './lib/types'
 
+
 export const connections: ConnectionInsert[] = [
     {
         fullname: 'Victor Ofoegbu',

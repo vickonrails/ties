@@ -42,13 +42,13 @@ const TableBody = <T extends Connection>({ table, loading }: { table: Table<T>, 
                         className='hover:bg-gray-100 hover:cursor-pointer transition-colors border border-t-0 border-gray-100'
                     >
                         {row.getVisibleCells().map(cell => (
-                            <td key={cell.id} className='py-4 px-4 text-sm text-gray-500'>
+                            <td key={cell.id} className='p-3 text-sm text-gray-500'>
                                 {loading ? 'loading...' :
                                     <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
                                 }
                             </td>
                         ))}
-                        <td className='font-normal text-left text-sm p-3 px-4 text-gray-600'>
+                        <td className='font-normal text-left text-sm p-2 text-gray-600'>
                             <ConnectionTableActions
                                 connection={row.original}
                                 actions={{ onDelete, onDeleteClick: showDialog, onEditClick: showEditDialog, onReachOutClick: showReachOutDialog, onHistoryClick: showHistoryDialog }}

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import { connections } from './data.ts'
+import connections from './data.json' assert {type: 'json'}
 import { Database } from './lib/database.types';
 
 dotenv.config();
