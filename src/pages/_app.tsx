@@ -4,7 +4,7 @@ import { type AppProps } from 'next/app'
 import { useState } from 'react'
 import { type Database } from '../../lib/database.types'
 
-import '../../src/index.css'
+import '../assets/index.css'
 
 function MyApp({
     Component,

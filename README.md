@@ -1,7 +1,7 @@
-
-
 # Ties (Development)
-Ties is the most delightful way to stay in touch with people that mean a lot to you.
+Ties is the most delightful way to stay in touch with people that mean a lot to you. See demo [on YouTube](https://www.youtube.com/watch?v=iKfEhSCre30)
+
+![GIF Demo](./.github/assets/demo.gif)
 
 ## Setup
 - Ties is built with a [Supabase](http://supabase.com/) backend, so the first thing you'd want create a new project (Create a supabase account). Follow this video if you don't know what supabase is. After creating your project, you'll need to copy `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
